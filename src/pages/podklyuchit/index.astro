@@ -1,0 +1,45 @@
+---
+import { withBase } from '../../lib/config';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import ClientMark from '../../components/ClientMark.astro';
+import { clients } from '../../lib/catalog';
+---
+
+<Layout
+  title="Как подключить свой ИИ"
+  description="Пошаговые инструкции для Claude, ChatGPT, Le Chat, Cursor, Claude Code, LM Studio, n8n и Yandex AI Studio."
+>
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">ВАШ ИИ. ТЕПЕРЬ С ВАШИМИ ДАННЫМИ.</span>
+      <h1>Кого подключим к делу?</h1>
+      <p>
+        Выберите своего помощника. Мы покажем, куда вставить ссылку и как проверить, что всё
+        работает.
+      </p>
+    </div>
+  </section>
+  <section class="section section-top">
+    <div class="container">
+      <div class="client-grid">
+        {clients.map((c) => (
+          <a href={withBase(`/podklyuchit/${c.id}/`)} class="client-card">
+            <ClientMark client={c} />
+            <h2>{c.name}</h2>
+            <p>{c.description}</p>
+            <small>Авторизация: {c.auth}</small>
+            <span class="text-link">
+              Инструкция <Icon name="arrow" size={15} />
+            </span>
+          </a>
+        ))}
+      </div>
+      <p class="notice" style="margin-top:25px">
+        GigaChat напрямую не подключается к MCP: для него нужны инструменты разработчика.
+        Доступность коннекторов и требования к тарифам остальных клиентов проверяйте в актуальном
+        интерфейсе выбранного ИИ.
+      </p>
+    </div>
+  </section>
+</Layout>

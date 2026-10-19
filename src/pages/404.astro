@@ -1,0 +1,33 @@
+---
+import { withBase } from '../lib/config';
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<Layout title="Страница не найдена" noindex>
+  <section class="error-page">
+    <div class="container">
+      <span class="error-number">404</span>
+      <h1>Здесь пока нет ответа.</h1>
+      <p>Возможно, адрес изменился. Попробуйте найти нужный сервис.</p>
+      <form action={withBase('/katalog/')} method="get">
+        <label class="sr-only" for="not-found-search">
+          Название сервиса
+        </label>
+        <input
+          class="search-input"
+          style="padding-left:16px"
+          name="q"
+          id="not-found-search"
+          placeholder="Например, Ozon"
+        />
+        <button class="button">
+          Найти <Icon name="search" size={17} />
+        </button>
+      </form>
+      <a class="text-link" href={withBase('/')}>
+        Вернуться на главную <Icon name="arrow" size={16} />
+      </a>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,47 @@
+---
+import { withBase } from '../lib/config';
+import ServiceMark from './ServiceMark.astro';
+import Icon from './Icon.astro';
+import { appLink } from '../lib/config';
+import type { Service } from '../lib/catalog';
+const { service: s } = Astro.props as { service: Service };
+---
+
+<article
+  class="service-card"
+  data-service-card
+  data-name={s.name.toLowerCase()}
+  data-category={s.category}
+  data-segments={s.segments.join(' ')}
+  data-status={s.status}
+>
+  <div class="service-card-top">
+    <ServiceMark service={s} />
+    <span class:list={['status', { soon: s.status === 'soon' }]}>
+      {s.status === 'available' ? 'Доступно' : 'Скоро'}
+    </span>
+  </div>
+  <h3>
+    <a href={withBase(`/katalog/${s.id}/`)}>
+      {s.name}
+      <Icon name="arrow" size={17} />
+    </a>
+  </h3>
+  <p>{s.short}</p>
+  <div class="service-card-bottom">
+    {s.status === 'available' ? (
+      <>
+        <a href={appLink(`/connect/${s.id}`)} class="text-link">
+          Подключить <Icon name="arrow" size={15} />
+        </a>
+        <a href={withBase(`/katalog/${s.id}/`)} class="muted-link">
+          Инструкция
+        </a>
+      </>
+    ) : (
+      <button class="text-link" data-vote={s.id} data-service-name={s.name}>
+        Хочу этот сервис <span>＋</span>
+      </button>
+    )}
+  </div>
+</article>

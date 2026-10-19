@@ -1,0 +1,514 @@
+---
+import { withBase } from '../lib/config';
+import Layout from '../layouts/Layout.astro';
+import CTA from './CTA.astro';
+import Icon from './Icon.astro';
+import ChatMockup from './ChatMockup.astro';
+import ServiceMark from './ServiceMark.astro';
+import ServiceCard from './ServiceCard.astro';
+import Pricing from './Pricing.astro';
+import FAQ from './FAQ.astro';
+import { catalog } from '../lib/catalog';
+import { config } from '../lib/config';
+const { segment = 'seller' } = Astro.props;
+const seller = segment === 'seller',
+  personal = segment === 'personal';
+const title = seller
+  ? 'Спросите свой ИИ, как дела в бизнесе'
+  : personal
+    ? 'Ваш ИИ знает про вас больше, чем вы думаете'
+    : 'Спросите ИИ, что происходит в компании';
+const description = seller
+  ? 'Подключите Claude или ChatGPT к Ozon, Wildberries, CRM и финансам одной ссылкой. Только чтение, 10 минут, без программиста.'
+  : personal
+    ? 'Подключите фитнес-браслет и покупки к своему ИИ. Спрашивайте про сон, нагрузку, привычки и продукты.'
+    : 'CRM, финансы, задачи и реклама — в одном разговоре с Claude или ChatGPT. Без таблиц, выгрузок и ожидания отчёта.';
+const services = catalog.services.filter((s) => s.segments.includes(segment));
+const waiting = personal && services.filter((s) => s.status === 'available').length < 3;
+const questions = seller
+  ? [
+      [
+        'wallet',
+        'Сколько реально заработали за неделю?',
+        'После комиссий, логистики и возвратов.',
+        'Чистая прибыль за неделю — 214 800 ₽. Комиссии составили 18% выручки.',
+      ],
+      [
+        'chart',
+        'Какие товары продаются в минус?',
+        'Найдите то, что съедает вашу маржу.',
+        'У трёх товаров отрицательная маржа. Больше всего теряет органайзер: −42 ₽ на заказ.',
+      ],
+      [
+        'box',
+        'Что скоро закончится на складах?',
+        'Пополните остатки до потери продаж.',
+        'Запаса двух популярных товаров хватит на 6 дней при текущем темпе продаж.',
+      ],
+      [
+        'bolt',
+        'Окупается ли наша реклама?',
+        'Поймите, какие кампании приносят деньги.',
+        'Кампания «Весна» приносит 3,4 ₽ на каждый рубль расходов. Две кампании требуют проверки.',
+      ],
+      [
+        'chat',
+        'Какие отзывы требуют ответа?',
+        'Не упустите важное за сотней уведомлений.',
+        'Есть 4 новых отзыва с оценкой до 3 звёзд. В двух упоминается повреждённая упаковка.',
+      ],
+      [
+        'globe',
+        'Построй дашборд собственника',
+        'Главные цифры бизнеса — на одном экране.',
+        'Вот сводка: выручка, прибыль, остатки и расходы на рекламу с изменениями за неделю.',
+      ],
+    ]
+  : personal
+    ? [
+        [
+          'heart',
+          'Как я восстанавливаюсь?',
+          'Замечайте связь между сном и нагрузкой.',
+          'Пример: после трёх дней высокого стресса восстановление снизилось.',
+        ],
+        [
+          'clock',
+          'Достаточно ли я сплю?',
+          'Увидьте свои привычки в перспективе.',
+          'Пример: средняя продолжительность сна — 7 часов 12 минут.',
+        ],
+        [
+          'wallet',
+          'Что я чаще всего покупаю?',
+          'Покупки без ручного учёта.',
+          'Пример: 32% продуктового бюджета приходится на молочные продукты.',
+        ],
+        [
+          'chart',
+          'Есть ли аналоги дешевле?',
+          'Разбирайтесь в расходах на продукты.',
+          'Пример: список сопоставимых покупок и разница в цене.',
+        ],
+        [
+          'bolt',
+          'Как меняется моя нагрузка?',
+          'Сравнивайте недели и тренировки.',
+          'Пример: нагрузка выросла на 12% относительно прошлой недели.',
+        ],
+        [
+          'globe',
+          'Собери мою сводку недели',
+          'Сон, движение и привычки в одном ответе.',
+          'Пример: больше сна, стабильная активность и меньше спонтанных покупок.',
+        ],
+      ]
+    : [
+        [
+          'chart',
+          'Какие сделки зависли?',
+          'Увидьте узкие места в воронке продаж.',
+          'Пример: 8 сделок без активности более недели.',
+        ],
+        [
+          'wallet',
+          'Хватит ли денег через месяц?',
+          'Планируйте платежи заранее.',
+          'Пример: при текущем графике платежей остаток снизится на 18%.',
+        ],
+        [
+          'bolt',
+          'Окупается ли Директ?',
+          'Сравнивайте затраты и результат.',
+          'Пример: две кампании приносят 70% целевых заявок.',
+        ],
+        [
+          'clock',
+          'Какие задачи просрочены?',
+          'Управляйте по результату.',
+          'Пример: 12 просроченных задач в трёх проектах.',
+        ],
+        [
+          'box',
+          'Что происходит на складе?',
+          'Проверяйте запасы одним вопросом.',
+          'Пример: 4 позиции ниже минимального остатка.',
+        ],
+        [
+          'globe',
+          'Собери сводку компании',
+          'Цифры из CRM, финансов и задач.',
+          'Пример: продажи выросли, расходы стабильны, три проекта требуют внимания.',
+        ],
+      ];
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: config.brand,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  offers: { '@type': 'Offer', price: catalog.pricing.month / 100, priceCurrency: 'RUB' },
+};
+---
+
+<Layout title={title} description={description} schema={schema} waitlist={waiting}>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <div class="hero-badge">
+          <span class="live-dot"></span>
+          {seller
+            ? 'Для тех, кто управляет своим бизнесом'
+            : personal
+              ? 'Больше смысла в ваших данных'
+              : 'Для собственников и небольших команд'}
+        </div>
+        <h1>
+          {seller ? (
+            <>
+              Спросите свой ИИ,
+              <br />
+              как дела
+              <br />в <em>бизнесе.</em>
+            </>
+          ) : personal ? (
+            <>
+              Ваш ИИ знает
+              <br />
+              про вас <em>больше,</em>
+              <br />
+              чем вы думаете.
+            </>
+          ) : (
+            <>
+              Спросите ИИ,
+              <br />
+              что происходит
+              <br />
+              <em>в компании.</em>
+            </>
+          )}
+        </h1>
+        <p class="hero-description">{description}</p>
+        <div class="hero-actions">
+          {waiting ? (
+            <button class="button" data-vote="personal" data-service-name="ваш сервис">
+              Узнать о запуске <Icon name="arrow" size={18} />
+            </button>
+          ) : (
+            <CTA block="hero" />
+          )}
+          <a href="#kak-eto-rabotaet" class="text-link">
+            Как это работает <Icon name="arrow" size={14} />
+          </a>
+        </div>
+        <p class="hero-fineprint">
+          <Icon name="check" size={13} />
+          {waiting
+            ? 'Оставьте email · сообщим, когда появится ваш сервис'
+            : '7 дней бесплатно · отмена в один клик · только чтение'}
+        </p>
+        <div class="hero-clients">
+          <span>Работает с вашим ИИ</span>
+          <span class="client-divider"></span>
+          <span class="client-word">
+            <span class="claude">
+              <Icon name="asterisk" size={19} />
+            </span>{' '}
+            Claude
+          </span>
+          <span class="client-word">
+            <span class="gpt">◎</span> ChatGPT
+          </span>
+          <span>
+            и другими <Icon name="arrow" size={11} />
+          </span>
+        </div>
+      </div>
+      <ChatMockup />
+    </div>
+  </section>
+  <section class="service-strip">
+    <div class="container">
+      <p class="strip-caption">
+        {personal
+          ? 'Ваши привычные сервисы. Новые возможности.'
+          : 'Ваши сервисы уже умеют разговаривать'}
+      </p>
+      <div class="strip-logos">
+        {services
+          .filter((s) => personal || s.status === 'available')
+          .slice(0, 8)
+          .map((s) => (
+            <a href={withBase(`/katalog/${s.id}/`)} class="strip-logo">
+              <ServiceMark service={s} />
+              <span>{s.name}</span>
+            </a>
+          ))}
+        <a href={withBase('/katalog/')} class="text-link">
+          Все сервисы <Icon name="arrow" size={14} />
+        </a>
+      </div>
+    </div>
+  </section>
+  <section id="kak-eto-rabotaet" class="section">
+    <div class="container section-line" style="padding-top:70px">
+      <div class="section-heading center">
+        <span class="eyebrow">ПРОЩЕ, ЧЕМ КАЖЕТСЯ</span>
+        <h2>От данных до ответа — три шага</h2>
+        <p>Без программиста, сложных настроек и новых привычек.</p>
+      </div>
+      <div class="steps-grid">
+        <article class="step">
+          <span class="step-number">ШАГ 01</span>
+          <div class="step-visual">
+            {catalog.services.slice(0, 3).map((s) => (
+              <ServiceMark service={s} />
+            ))}
+            <span class="small-check">
+              <Icon name="check" size={10} />
+            </span>
+          </div>
+          <h3>Подключите свои сервисы</h3>
+          <p>Выберите нужные кабинеты и добавьте ключи только на чтение. Мы покажем каждый шаг.</p>
+        </article>
+        <article class="step">
+          <span class="step-number">ШАГ 02</span>
+          <div class="step-visual">
+            <div class="step-url">
+              <Icon name="link" size={16} />
+              <span>mcp.ваш-домен / …</span>
+              <Icon name="check" size={15} />
+            </div>
+          </div>
+          <h3>Одну ссылку — в свой ИИ</h3>
+          <p>Скопируйте ссылку из кабинета в Claude, ChatGPT или другой привычный вам ИИ.</p>
+        </article>
+        <article class="step">
+          <span class="step-number">ШАГ 03</span>
+          <div class="step-visual">
+            <div class="mini-prompt">
+              <span>
+                <Icon name="asterisk" size={12} />
+              </span>{' '}
+              Как дела у моего бизнеса? <span>↑</span>
+            </div>
+          </div>
+          <h3>Просто спросите</h3>
+          <p>Пишите обычными словами. ИИ сам обратится к нужным сервисам и соберёт ответ.</p>
+        </article>
+      </div>
+      <div class="steps-footer">
+        <Icon name="check" size={15} />
+        Claude, ChatGPT, Le Chat, Cursor и другие{' '}
+        <a href={withBase('/podklyuchit/')}>Выбрать свой ИИ →</a>
+      </div>
+    </div>
+  </section>
+  {personal && (
+    <section class="section section-top">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">ВЫБИРАЕТЕ ВЫ</span>
+          <h2>Какой сервис подключим первым?</h2>
+          <p>Расскажите, что вам нужно. Сообщим о запуске выбранного подключения.</p>
+        </div>
+        <div class="service-grid">
+          {services.map((s) => (
+            <ServiceCard service={s} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+  <section class="section questions-section">
+    <div class="container">
+      <div class="section-heading row">
+        <div>
+          <span class="eyebrow">МЕНЬШЕ ОТЧЁТОВ. БОЛЬШЕ ОТВЕТОВ.</span>
+          <h2>
+            Хороший вопрос.
+            <br />
+            Теперь на него есть ответ.
+          </h2>
+        </div>
+        <p>
+          Не нужно знать, где искать.
+          <br />
+          Достаточно знать, что спросить.
+        </p>
+      </div>
+      <div class="question-grid">
+        {questions.map(([icon, q, sub, answer]) => (
+          <article class="question-card">
+            <span class="icon-tile">
+              <Icon name={icon} size={19} />
+            </span>
+            <h3>«{q}»</h3>
+            <p>{sub}</p>
+            <details>
+              <summary>Посмотреть пример ответа</summary>
+              <p>{answer} Данные демонстрационные.</p>
+            </details>
+          </article>
+        ))}
+      </div>
+      {!waiting && (
+        <div class="section-bottom-link">
+          <CTA block="questions" label="Задать свой первый вопрос" />
+        </div>
+      )}
+    </div>
+  </section>
+  <section class="section">
+    <div class="container owner-grid">
+      <div class="owner-text">
+        <span class="eyebrow">ДЛЯ ТЕХ, КТО ПРИНИМАЕТ РЕШЕНИЯ</span>
+        <h2>
+          {personal
+            ? 'Ваши данные должны работать на вас.'
+            : 'Кабинеты ведут менеджеры. А отвечать за деньги — вам.'}
+        </h2>
+        <p>
+          {personal
+            ? 'Понимайте свои привычки без таблиц и десятка приложений.'
+            : 'Не ждите понедельника, чтобы узнать, что произошло в четверг. Вся картина — у вас, в любой момент.'}
+        </p>
+        <ul class="benefit-list">
+          <li>
+            <Icon name="check" size={17} />
+            Картина по всем сервисам в одном ответе
+          </li>
+          <li>
+            <Icon name="check" size={17} />
+            Цифры напрямую из API, без пересказа
+          </li>
+          <li>
+            <Icon name="check" size={17} />
+            Можно спросить в любой момент, даже с телефона
+          </li>
+        </ul>
+      </div>
+      <div class="owner-visual">
+        <div class="owner-quote">
+          <div class="owner-quote-header">
+            <span>
+              <Icon name="asterisk" size={12} /> Утренняя сводка
+            </span>
+            <span>09:00</span>
+          </div>
+          <h3>
+            Доброе утро.
+            <br />
+            Вот что важно сегодня.
+          </h3>
+          <div class="dashboard-stat">
+            <span>Выручка за вчера</span>
+            <strong>
+              291 200 ₽{' '}
+              <span class="positive">
+                <Icon name="trend" size={11} /> 9%
+              </span>
+            </strong>
+          </div>
+          <div class="dashboard-stat">
+            <span>Чистая прибыль</span>
+            <strong>48 320 ₽</strong>
+          </div>
+          <div class="dashboard-stat">
+            <span>Требуют внимания</span>
+            <strong>2 товара · 1 кампания</strong>
+          </div>
+        </div>
+        <p class="owner-note">Пример сводки · ваши вопросы, ваши данные</p>
+      </div>
+    </div>
+  </section>
+  <section class="section section-top">
+    <div class="container">
+      <div class="section-heading row">
+        <div>
+          <span class="eyebrow">КОНТРОЛЬ ОСТАЁТСЯ У ВАС</span>
+          <h2>
+            Читает данные.
+            <br />
+            Не распоряжается бизнесом.
+          </h2>
+        </div>
+        <a href={withBase('/bezopasnost/')} class="text-link">
+          Подробнее о безопасности <Icon name="arrow" size={16} />
+        </a>
+      </div>
+      <div class="security-strip">
+        {[
+          ['eye', 'Только чтение', 'ИИ не меняет цены, не создаёт платежи и не удаляет данные.'],
+          [
+            'lock',
+            'Ключи зашифрованы',
+            'Требование к платформе: шифрование ключей и ограничение доступа.',
+          ],
+          ['globe', 'Сервер в России', 'Размещение платформы в России предусмотрено архитектурой.'],
+          [
+            'shield',
+            'Отключение в один клик',
+            'Отзовите подключение в кабинете или ключ в самом сервисе.',
+          ],
+        ].map(([icon, t, d]) => (
+          <article class="security-item">
+            <Icon name={icon} size={25} />
+            <h3>{t}</h3>
+            <p>{d}</p>
+          </article>
+        ))}
+      </div>
+      {!config.securityVerified && (
+        <p style="font-size:10px;margin-top:24px">
+          Требования к безопасности платформы. Проверка реализации — до публичного запуска.
+        </p>
+      )}
+    </div>
+  </section>
+  {!waiting && (
+    <section class="section pricing-section">
+      <div class="container">
+        <Pricing />
+      </div>
+    </section>
+  )}
+  <section class="section">
+    <div class="container faq-layout">
+      <div class="section-heading">
+        <span class="eyebrow">ДАВАЙТЕ РАЗБЕРЁМСЯ</span>
+        <h2>Остались вопросы?</h2>
+        <p>Собрали то, о чём спрашивают чаще всего.</p>
+        <a class="text-link" href={withBase('/voprosy/')}>
+          Все вопросы и ответы <Icon name="arrow" size={16} />
+        </a>
+      </div>
+      <FAQ />
+    </div>
+  </section>
+  <div class="container">
+    <section class="final-cta">
+      <span class="eyebrow">МЕНЬШЕ НЕОПРЕДЕЛЁННОСТИ. БОЛЬШЕ КОНТРОЛЯ.</span>
+      <h2>{personal ? 'Начните лучше понимать себя.' : 'Как дела в бизнесе? Просто спросите.'}</h2>
+      <p>
+        {waiting
+          ? 'Выберите сервис — и узнайте о запуске первым.'
+          : 'Подключите первый сервис. Задайте первый вопрос. Увидьте всю картину.'}
+      </p>
+      {waiting ? (
+        <button class="button" data-vote="personal" data-service-name="ваш сервис">
+          Оставить email и узнать о запуске <Icon name="arrow" size={17} />
+        </button>
+      ) : (
+        <CTA block="final" />
+      )}
+      <p class="hero-fineprint">
+        {waiting
+          ? 'Сообщим только о запуске выбранного сервиса'
+          : '7 дней бесплатно · без программиста · только чтение'}
+      </p>
+    </section>
+  </div>
+</Layout>

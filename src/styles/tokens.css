@@ -1,0 +1,45 @@
+@font-face {
+  font-family: Onest;
+  src: url('/fonts/onest-cyrillic.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: Onest;
+  src: url('/fonts/onest-latin.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+:root {
+  --font: 'Onest', system-ui, sans-serif;
+  --bg: #fbfaf7;
+  --surface: #fff;
+  --ink: #242b28;
+  --muted: #5e685f;
+  --accent: #b94125;
+  --accent-hover: #ac3c21;
+  --accent-soft: #f8eae2;
+  --green: #38674d;
+  --green-soft: #edf3eb;
+  --soon: #836224;
+  --soon-soft: #f8f0dd;
+  --line: #e8e7df;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --max-width: 1120px;
+  --section-gap: 108px;
+  --shadow: 0 20px 60px #262c2410;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --transition: 180ms ease;
+}

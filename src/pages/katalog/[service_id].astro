@@ -1,0 +1,183 @@
+---
+import { withBase } from '../../lib/config';
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ServiceMark from '../../components/ServiceMark.astro';
+import Icon from '../../components/Icon.astro';
+import { catalog } from '../../lib/catalog';
+import { appLink, config } from '../../lib/config';
+export function getStaticPaths() {
+  return catalog.services.map((service) => ({
+    params: { service_id: service.id },
+    props: { service },
+  }));
+}
+const { service: s } = Astro.props;
+const article = (await getCollection('services')).find((a) => a.data.service_id === s.id);
+const rendered = article ? await render(article) : null;
+const Content = rendered?.Content;
+const available = s.status === 'available';
+const schema = available
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: `Как подключить ${s.name} к ИИ`,
+      description: s.short,
+      step: [
+        { '@type': 'HowToStep', name: 'Подготовьте доступ', text: s.auth_label },
+        {
+          '@type': 'HowToStep',
+          name: 'Добавьте сервис',
+          text: 'Откройте кабинет и добавьте подключение с правами чтения.',
+        },
+        {
+          '@type': 'HowToStep',
+          name: 'Проверьте подключение',
+          text: 'Спросите ИИ: «Покажи мои подключения».',
+        },
+      ],
+    }
+  : undefined;
+---
+
+<Layout
+  title={`Как подключить ${s.name} к ChatGPT и Claude`}
+  description={`${s.short}. Инструкция подключения ${s.name} к вашему ИИ, необходимые права и примеры вопросов.`}
+  schema={schema}
+>
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Хлебные крошки">
+        <a href={withBase('/')}>Главная</a>
+        <span>/</span>
+        <a href={withBase('/katalog/')}>Сервисы</a>
+        <span>/</span>
+        <span>{s.name}</span>
+      </nav>
+      <div class="service-hero-row">
+        <ServiceMark service={s} />
+        <h1>{s.name} + ваш ИИ</h1>
+      </div>
+      <p>{s.short}. Спрашивайте обычными словами — получайте понятные ответы.</p>
+      <div class="service-hero-actions">
+        {available ? (
+          <a class="button" href={appLink(`/connect/${s.id}`)}>
+            Подключить {s.name}
+            <Icon name="arrow" size={17} />
+          </a>
+        ) : (
+          <button class="button" data-vote={s.id} data-service-name={s.name}>
+            Хочу этот сервис <Icon name="heart" size={17} />
+          </button>
+        )}
+        <span class:list={['status', { soon: !available }]}>
+          {available ? 'Доступно в каталоге' : 'Скоро'}
+        </span>
+        {!available && <span class="muted-link">Голосов: {s.votes}</span>}
+      </div>
+      {!config.app && (
+        <p class="notice" style="margin-top:25px;font-size:11px">
+          Платформа ещё не подключена. Это предварительная страница сервиса; выдавать или вводить
+          ключи на сайте не нужно.
+        </p>
+      )}
+    </div>
+  </section>
+  <div class="container article-layout">
+    <article class="prose">
+      <h2 id="examples">Что можно спросить</h2>
+      <div class="help-examples">
+        {s.examples.map((q) => (
+          <div class="help-example">«{q}»</div>
+        ))}
+      </div>
+      {available ? (
+        <>
+          <h2 id="requirements">Что понадобится</h2>
+          <p>
+            {s.auth_label}. Для настройки запланируйте около 10 минут и доступ к кабинету владельца.
+          </p>
+          <p>
+            Используйте отдельный ключ только на чтение. Если сервис не позволяет ограничить доступ,
+            сначала обсудите разрешения с поддержкой.
+          </p>
+          {Content ? (
+            <Content />
+          ) : (
+            <div class="notice">
+              Подробная инструкция для нового сервиса готовится. Не передавайте ключи до проверки
+              разрешений.
+            </div>
+          )}
+          <h2 id="permissions">Что мы можем и чего не можем</h2>
+          <p>{s.read_only_note}</p>
+          <p>
+            ИИ не должен ничего изменять в {s.name}. Отдельно проверьте права, которые показывает
+            сам сервис: ограничения определяются выданным вами ключом.
+          </p>
+          <h2 id="verify">Проверьте результат</h2>
+          <p>
+            После подключения спросите «Покажи мои подключения», затем задайте один из вопросов
+            выше. Если данные не появились, проверьте срок действия ключа и необходимые категории
+            доступа.
+          </p>
+        </>
+      ) : (
+        <>
+          <h2>Подключение готовится</h2>
+          <p>
+            Оставьте голос, чтобы получить уведомление о запуске. Email отправляется только в API
+            платформы; в предварительной версии отправка недоступна.
+          </p>
+          <button class="button" data-vote={s.id} data-service-name={s.name}>
+            Сообщить о запуске <Icon name="arrow" size={17} />
+          </button>
+        </>
+      )}
+    </article>
+    <aside class="article-aside">
+      <div class="aside-card">
+        <h2>Короткий путь к ответам</h2>
+        <p>Сервис → одна ссылка → ваш ИИ. Поможем на каждом шаге.</p>
+        {available ? (
+          <a class="button" href={appLink(`/connect/${s.id}`)}>
+            Подключить {s.name}
+            <Icon name="arrow" size={16} />
+          </a>
+        ) : (
+          <button class="button" data-vote={s.id} data-service-name={s.name}>
+            Хочу этот сервис
+          </button>
+        )}
+      </div>
+      <div class="aside-card">
+        <h3>В этой инструкции</h3>
+        <ul>
+          <li>
+            <a href="#examples">Что можно спросить</a>
+          </li>
+          {available && (
+            <>
+              <li>
+                <a href="#requirements">Что понадобится</a>
+              </li>
+              <li>
+                <a href="#permissions">Права подключения</a>
+              </li>
+              <li>
+                <a href="#verify">Проверка результата</a>
+              </li>
+            </>
+          )}
+          <li>
+            <a href={withBase('/podklyuchit/')}>Как подключить свой ИИ</a>
+          </li>
+        </ul>
+      </div>
+      <button class="text-link" data-support>
+        <Icon name="chat" size={18} />
+        Спросить поддержку
+      </button>
+    </aside>
+  </div>
+</Layout>

@@ -1,0 +1,92 @@
+---
+import { withBase, absoluteUrl } from '../../lib/config';
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import { clients } from '../../lib/catalog';
+import { appLink } from '../../lib/config';
+export function getStaticPaths() {
+  return clients.map((client) => ({ params: { client_id: client.id }, props: { client } }));
+}
+const { client } = Astro.props;
+const article = (await getCollection('ai')).find((a) => a.data.client_id === client.id)!;
+const { Content, headings } = await render(article);
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: article.data.title,
+  description: article.data.description,
+  step: headings
+    .filter((h) => h.depth === 2)
+    .map((h) => ({
+      '@type': 'HowToStep',
+      name: h.text,
+      url: absoluteUrl(`/podklyuchit/${client.id}/#${h.slug}`),
+    })),
+};
+---
+
+<Layout title={article.data.title} description={article.data.description} schema={schema}>
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Хлебные крошки">
+        <a href={withBase('/podklyuchit/')}>Как подключить</a>
+        <span>/</span>
+        <span>{client.name}</span>
+      </nav>
+      <span class="client-symbol" style={`--client-color:${client.color};margin-bottom:20px`}>
+        {client.symbol}
+      </span>
+      <h1>
+        Подключите {client.name}
+        <br />к своему бизнесу
+      </h1>
+      <p>Одна ссылка — и ваш привычный ИИ сможет отвечать по данным из подключённых сервисов.</p>
+    </div>
+  </section>
+  <div class="container article-layout">
+    <article class="prose">
+      <Content />
+      <h2 id="support">Если не получилось</h2>
+      <ul>
+        <li>
+          Нет пункта меню: проверьте тариф и права владельца рабочего пространства в актуальной
+          справке клиента.
+        </li>
+        <li>Не открывается окно входа: разрешите всплывающие окна для выбранного клиента.</li>
+        <li>
+          ИИ не вызывает инструменты: включите подключение в текущем диалоге и начните новый чат.
+        </li>
+        <li>
+          Не отправляйте персональные ключи в текст чата с ИИ. Добавляйте их только в настройки
+          подключения.
+        </li>
+      </ul>
+      <button class="button button-secondary" data-support>
+        <Icon name="chat" size={18} />
+        Спросить поддержку
+      </button>
+    </article>
+    <aside class="article-aside">
+      <div class="aside-card">
+        <h2>Нужна ссылка подключения?</h2>
+        <p>Добавьте сервисы в кабинете и скопируйте общую ссылку для ИИ.</p>
+        <a class="button" href={appLink('/connections')}>
+          Открыть кабинет <Icon name="arrow" size={16} />
+        </a>
+      </div>
+      <div class="aside-card">
+        <h3>По шагам</h3>
+        <ul>
+          {headings
+            .filter((h) => h.depth === 2)
+            .map((h) => (
+              <li>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+        </ul>
+      </div>
+    </aside>
+  </div>
+</Layout>

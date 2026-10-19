@@ -1,0 +1,26 @@
+---
+import { appLink } from '../lib/config';
+import Icon from './Icon.astro';
+interface Props {
+  block?: string;
+  label?: string;
+  plan?: string;
+  secondary?: boolean;
+}
+const {
+  block = 'page',
+  label = 'Попробовать 7 дней бесплатно',
+  plan = 'month',
+  secondary = false,
+} = Astro.props;
+---
+
+<a
+  href={appLink(`/signup?plan=${plan}`)}
+  class:list={['button', { 'button-secondary': secondary }]}
+  data-cta={block}
+  data-plan={plan}
+>
+  {label}
+  <Icon name="arrow" size={18} />
+</a>

@@ -1,0 +1,54 @@
+name: Deploy Astro to GitHub Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  repository_dispatch:
+    types: [catalog-updated]
+  schedule:
+    - cron: '17 2 * * *'
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PUBLIC_BRAND: ${{ vars.PUBLIC_BRAND }}
+      PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || 'https://100pasha.github.io/aiport_site/' }}
+      PUBLIC_APP_URL: ${{ vars.PUBLIC_APP_URL }}
+      PUBLIC_SUPPORT_EMAIL: ${{ vars.PUBLIC_SUPPORT_EMAIL }}
+      PUBLIC_YM_ID: ${{ vars.PUBLIC_YM_ID }}
+      PUBLIC_LEGAL_NAME: ${{ vars.PUBLIC_LEGAL_NAME }}
+      PUBLIC_LEGAL_INN: ${{ vars.PUBLIC_LEGAL_INN }}
+      PUBLIC_LEGAL_OGRNIP: ${{ vars.PUBLIC_LEGAL_OGRNIP }}
+      PUBLIC_YANDEX_VERIFICATION: ${{ vars.PUBLIC_YANDEX_VERIFICATION }}
+      PUBLIC_SECURITY_VERIFIED: ${{ vars.PUBLIC_SECURITY_VERIFIED }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm run build
+      - run: npm run test:site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment

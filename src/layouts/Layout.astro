@@ -1,0 +1,321 @@
+---
+import { withBase, absoluteUrl } from '../lib/config';
+import '../styles/tokens.css';
+import '../styles/global.css';
+import { config, appLink } from '../lib/config';
+import Icon from '../components/Icon.astro';
+import CTA from '../components/CTA.astro';
+import { catalog } from '../lib/catalog';
+interface Props {
+  title: string;
+  description?: string;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+  image?: string;
+  noindex?: boolean;
+  waitlist?: boolean;
+}
+const {
+  title,
+  description = `${Astro.props.title}. Подключите свой ИИ к данным бизнеса. Только чтение, простое подключение и 7 дней бесплатно.`,
+  schema,
+  image = '/img/og.png',
+  noindex = false,
+  waitlist = false,
+} = Astro.props;
+const canonical = absoluteUrl(Astro.url.pathname);
+const nav = [
+  ['/katalog/', 'Сервисы'],
+  ['/podklyuchit/', 'Как подключить'],
+  ['/tseny/', 'Цены'],
+  ['/bezopasnost/', 'Безопасность'],
+];
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} — {config.brand}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#fbfaf7" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:title" content={`${title} — ${config.brand}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={absoluteUrl(image)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {config.verification && <meta name="yandex-verification" content={config.verification} />}
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`Блог ${config.brand}`}
+      href={withBase('/rss.xml')}
+    />
+    <link
+      rel="preload"
+      as="font"
+      href={withBase('/fonts/onest-cyrillic.woff2')}
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      href={withBase('/fonts/onest-latin.woff2')}
+      type="font/woff2"
+      crossorigin
+    />
+    {schema && (
+      <script
+        type="application/ld+json"
+        set:html={JSON.stringify(schema).replace(/</g, '\\u003c')}
+      />
+    )}
+  </head>
+  <body
+    data-app={config.app}
+    data-site={config.site}
+    data-ym-id={config.ymId}
+    data-email={config.email}
+  >
+    <a class="skip-link" href="#main">
+      Перейти к содержимому
+    </a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href={withBase('/')} class="logo" aria-label={`${config.brand} — главная`}>
+          <span class="logo-symbol" aria-hidden="true">
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+          </span>
+          {config.brand}
+          <span class="logo-dot">.</span>
+        </a>
+        <nav class="desktop-nav" aria-label="Основная навигация">
+          {nav.map(([href, label]) => (
+            <a
+              class:list={{ current: Astro.url.pathname.startsWith(withBase(href)) }}
+              href={withBase(href)}
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+        <div class="header-actions">
+          <a href={appLink('/login')} class="login-link">
+            Войти <Icon name="arrow" size={14} />
+          </a>
+          <CTA block="header" label="Попробовать бесплатно" />
+        </div>
+        <button
+          class="menu-toggle"
+          aria-label="Открыть меню"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <Icon name="menu" />
+        </button>
+      </div>
+      <nav id="mobile-menu" class="mobile-nav" aria-label="Мобильная навигация" hidden>
+        {nav.map(([href, label]) => (
+          <a href={withBase(href)}>{label}</a>
+        ))}
+        <a href={appLink('/login')}>Войти в кабинет</a>
+      </nav>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <a href={withBase('/')} class="logo">
+              <span class="logo-symbol" aria-hidden="true">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+              </span>
+              {config.brand}
+              <span class="logo-dot">.</span>
+            </a>
+            <p>
+              Ваш бизнес.
+              <br />В одном разговоре с ИИ.
+            </p>
+            <span class="footer-note">
+              <span class="live-dot"></span> Сделано для вашего спокойствия
+            </span>
+          </div>
+          <div>
+            <h2>Продукт</h2>
+            <a href={withBase('/katalog/')}>Сервисы</a>
+            <a href={withBase('/podklyuchit/')}>Как подключить</a>
+            <a href={withBase('/tseny/')}>Цены</a>
+            <a href={withBase('/bezopasnost/')}>Безопасность</a>
+          </div>
+          <div>
+            <h2>Для вас</h2>
+            <a href={withBase('/')}>Селлерам</a>
+            <a href={withBase('/biznes/')}>Малому бизнесу</a>
+            <a href={withBase('/dlya-sebya/')}>Для себя</a>
+            <a href={withBase('/partneram/')}>Партнёрам</a>
+          </div>
+          <div>
+            <h2>Помощь</h2>
+            <a href={withBase('/voprosy/')}>Частые вопросы</a>
+            <a href={withBase('/blog/')}>Блог</a>
+            <button class="footer-support" data-support>
+              Написать нам <Icon name="arrow" size={14} />
+            </button>
+            {config.email && <a href={`mailto:${config.email}`}>{config.email}</a>}
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>
+            © {new Date().getFullYear()} {config.brand}
+          </span>
+          <div>
+            <a href={withBase('/oferta/')}>Оферта</a>
+            <a href={withBase('/politika/')}>Политика конфиденциальности</a>
+            <a href={withBase('/soglasie/')}>Согласие на обработку данных</a>
+          </div>
+        </div>
+        <p class="legal-details">
+          {config.legalName
+            ? `${config.legalName} · ИНН ${config.inn || 'не указан'} · ОГРНИП ${config.ogrnip || 'не указан'}`
+            : 'Предварительная версия. Реквизиты оператора и условия сервиса будут опубликованы до начала продаж.'}
+        </p>
+      </div>
+    </footer>
+    <div class="cookie-banner" data-cookie-banner hidden>
+      <div>
+        <strong>Немного о cookie</strong>
+        <p>
+          Мы используем cookie для аналитики. <a href={withBase('/politika/')}>Подробнее</a>
+        </p>
+      </div>
+      <div class="cookie-actions">
+        <button class="button button-secondary" data-consent="necessary">
+          Только необходимые
+        </button>
+        <button class="button" data-consent="all">
+          Принять
+        </button>
+      </div>
+    </div>
+    <button class="support-fab" data-support aria-label="Есть вопрос? Открыть поддержку">
+      <Icon name="chat" size={23} />
+      <span>Есть вопрос?</span>
+    </button>
+    <div class="mobile-sticky" data-sticky hidden>
+      {waitlist ? (
+        <button class="button" data-vote="personal" data-service-name="ваш сервис">
+          Узнать о запуске <Icon name="arrow" size={16} />
+        </button>
+      ) : (
+        <CTA block="mobile_sticky" label="Попробовать бесплатно" />
+      )}
+    </div>
+    <dialog id="vote-dialog" class="modal" aria-labelledby="vote-title">
+      <button class="modal-close" data-close aria-label="Закрыть окно">
+        <Icon name="close" />
+      </button>
+      <span class="icon-tile">
+        <Icon name="heart" size={25} />
+      </span>
+      <h2 id="vote-title">Добавим то, что нужно вам</h2>
+      <p>
+        Оставьте email — сообщим, когда появится <strong data-vote-name>этот сервис</strong>.
+      </p>
+      <form id="vote-form">
+        <input type="hidden" name="service_id" />
+        <label data-personal-choice hidden>
+          Выберите сервис
+          <select class="filter-select" style="width:100%;margin-top:6px" name="personal_service">
+            {catalog.services
+              .filter((s) => s.segments.includes('personal'))
+              .map((s) => (
+                <option value={s.id}>{s.name}</option>
+              ))}
+          </select>
+        </label>
+        <label class="custom-service-label" hidden>
+          Название сервиса
+          <input name="service_name" maxlength="100" placeholder="Например, Notion" />
+        </label>
+        <label>
+          Ваш email
+          <input
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            placeholder="you@company.ru"
+            maxlength="254"
+          />
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="consent" required />
+          <span>
+            Соглашаюсь с{' '}
+            <a href={withBase('/soglasie/')} target="_blank">
+              обработкой персональных данных
+            </a>{' '}
+            и{' '}
+            <a href={withBase('/politika/')} target="_blank">
+              политикой конфиденциальности
+            </a>
+          </span>
+        </label>
+        <button class="button" type="submit">
+          Сообщить о запуске <Icon name="arrow" size={17} />
+        </button>
+        <p class="form-message" role="status" aria-live="polite"></p>
+      </form>
+    </dialog>
+    <dialog id="support-dialog" class="modal" aria-labelledby="support-title">
+      <button class="modal-close" data-close aria-label="Закрыть окно">
+        <Icon name="close" />
+      </button>
+      <span class="icon-tile">
+        <Icon name="chat" size={25} />
+      </span>
+      <h2 id="support-title">Поможем разобраться</h2>
+      <p>С чего начнём?</p>
+      <div class="support-questions">
+        <a href={withBase('/katalog/ozon/')}>
+          Как подключить Ozon? <Icon name="arrow" size={16} />
+        </a>
+        <a href={withBase('/bezopasnost/')}>
+          Это безопасно? <Icon name="arrow" size={16} />
+        </a>
+        <a href={withBase('/podklyuchit/')}>
+          Какой ИИ выбрать? <Icon name="arrow" size={16} />
+        </a>
+      </div>
+      {config.email ? (
+        <a class="button" href={`mailto:${config.email}`}>
+          Написать в поддержку
+        </a>
+      ) : (
+        <p class="notice">
+          Онлайн-поддержка появится после запуска платформы. Пока ответы доступны в инструкциях и
+          FAQ.
+        </p>
+      )}
+    </dialog>
+    <script>
+      import '../scripts/site';
+    </script>
+  </body>
+</html>

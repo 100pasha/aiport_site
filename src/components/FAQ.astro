@@ -1,0 +1,20 @@
+---
+import { getCollection } from 'astro:content';
+import Icon from './Icon.astro';
+const { home = true } = Astro.props;
+const items = (await getCollection('faq')).filter((x) => !home || x.data.home);
+---
+
+<div class="faq-list">
+  {items.map((item) => (
+    <details>
+      <summary>
+        {item.data.title}
+        <Icon name="chevron" size={21} />
+      </summary>
+      <div class="faq-answer">
+        <p>{item.body}</p>
+      </div>
+    </details>
+  ))}
+</div>

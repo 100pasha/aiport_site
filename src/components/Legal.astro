@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { config } from '../lib/config';
+const { title } = Astro.props;
+---
+
+<Layout title={title} noindex={!config.legalName}>
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">ДОКУМЕНТЫ</span>
+      <h1>{title}</h1>
+      <p>Редакция для подготовки к запуску · 19 октября 2026</p>
+    </div>
+  </section>
+  <div class="container" style="padding-bottom:80px">
+    <div class="prose">
+      <div class="notice legal-banner">
+        Шаблон для проверки владельцем и юристом. До заполнения реквизитов и согласования условий не
+        является действующим предложением заключить договор и не предназначен для начала продаж.
+      </div>
+      <p>
+        <strong>Оператор:</strong> {config.legalName || '{ИП_ФИО}'}. ИНН: {config.inn || '{ИП_ИНН}'}
+        . ОГРНИП: {config.ogrnip || '{ИП_ОГРНИП}'}. Контакт: {config.email || '{EMAIL}'}.
+      </p>
+      <slot />
+    </div>
+  </div>
+</Layout>

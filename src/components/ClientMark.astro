@@ -1,0 +1,12 @@
+---
+import Icon from './Icon.astro';
+import { clients } from '../lib/catalog';
+interface Props {
+  client: (typeof clients)[number];
+}
+const { client: c } = Astro.props;
+---
+
+<span class="client-symbol" style={`--client-color:${c.color}`} aria-hidden="true">
+  {c.id === 'claude' ? <Icon name="asterisk" size={27} /> : c.symbol}
+</span>

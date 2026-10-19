@@ -1,0 +1,34 @@
+---
+import { withBase } from '../lib/config';
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<Layout title="Кабинет готовится к запуску" noindex>
+  <section class="platform-card">
+    <span class="icon-tile">
+      <Icon name="link" size={25} />
+    </span>
+    <h1>
+      Скоро здесь будет
+      <br />
+      ваш центр управления.
+    </h1>
+    <p>
+      Вы смотрите предварительную версию сайта. Регистрация, оплата и подключения работают на
+      отдельной платформе — её адрес пока не настроен.
+    </p>
+    <p>
+      Сейчас можно изучить сервисы, выбрать ИИ и посмотреть инструкции. Ключи и платёжные данные на
+      этом сайте вводить не нужно.
+    </p>
+    <a href={withBase('/katalog/')} class="button">
+      Посмотреть сервисы <Icon name="arrow" size={17} />
+    </a>
+    <div style="margin-top:20px">
+      <a href={withBase('/podklyuchit/')} class="text-link">
+        Выбрать свой ИИ →
+      </a>
+    </div>
+  </section>
+</Layout>

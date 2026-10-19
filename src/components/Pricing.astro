@@ -1,0 +1,70 @@
+---
+import { catalog } from '../lib/catalog';
+import { money } from '../lib/config';
+import CTA from './CTA.astro';
+import Icon from './Icon.astro';
+const p = catalog.pricing;
+const discount = Math.round((1 - p.year / (p.month * 12)) * 100);
+---
+
+<div class="pricing-layout">
+  <div class="pricing-copy">
+    <span class="eyebrow">ПРОСТОЙ ТАРИФ</span>
+    <h2>
+      Вся картина бизнеса.
+      <br />
+      За {money(p.month)} ₽ в месяц.
+    </h2>
+    <p>
+      Около {Math.round(p.month / 100 / 30)} ₽ в день, чтобы принимать решения
+      <br class="desktop-only" /> по цифрам, а не по ощущениям.
+    </p>
+    <div class="price-assurance">
+      <Icon name="shield" size={21} />
+      <span>
+        Первые {p.trial_days} дней бесплатно.
+        <br />
+        <strong>Отмена в один клик.</strong>
+      </span>
+    </div>
+  </div>
+  <div class="pricing-card" data-pricing data-month={money(p.month)} data-year={money(p.year)}>
+    <div class="pricing-card-head">
+      <span>Всё включено</span>
+      <span class="pill">Без скрытых доплат</span>
+    </div>
+    <div class="billing-switch" role="group" aria-label="Период оплаты">
+      <button class="active" data-billing="month" aria-pressed="true">
+        Месяц
+      </button>
+      <button data-billing="year" aria-pressed="false">
+        Год <span>−{discount}%</span>
+      </button>
+    </div>
+    <div class="price">
+      <strong data-price>{money(p.month)}</strong>
+      <span>
+        ₽ <span data-period>/ месяц</span>
+      </span>
+    </div>
+    <p class="price-detail" data-price-detail>
+      После {p.trial_days} бесплатных дней
+    </p>
+    <ul class="feature-list">
+      {[
+        'Все доступные сервисы',
+        'Любое число подключений',
+        'Все ИИ-клиенты в одном тарифе',
+        'Готовые сценарии для бизнеса',
+        'Помощь с подключением',
+      ].map((t) => (
+        <li>
+          <Icon name="check" size={17} />
+          {t}
+        </li>
+      ))}
+    </ul>
+    <CTA block="pricing" />
+    <p class="price-footnote">Напомним до окончания пробного периода</p>
+  </div>
+</div>

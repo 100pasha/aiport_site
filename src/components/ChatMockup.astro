@@ -1,0 +1,104 @@
+---
+import Icon from './Icon.astro';
+---
+
+<div class="chat-scene">
+  <div class="chat-window">
+    <div class="chat-toolbar">
+      <span class="chat-avatar">
+        <Icon name="asterisk" size={24} />
+      </span>
+      <span>
+        <strong>Ваш ИИ-помощник</strong>
+        <small>
+          <span class="live-dot"></span> Подключён к вашему бизнесу
+        </small>
+      </span>
+      <span class="chat-more">···</span>
+    </div>
+    <div class="chat-content">
+      <div class="chat-user">
+        Сколько заработали на Ozon и WB
+        <br class="desktop-only" /> за вчера? И что просело?
+      </div>
+      <div class="assistant-label">
+        <span>
+          <Icon name="asterisk" size={22} />
+        </span>{' '}
+        Вижу всю картину. Вот главное:
+      </div>
+      <div class="chat-stats">
+        <div>
+          <small>Чистая прибыль</small>
+          <strong>
+            48 320 <span>₽</span>
+          </strong>
+          <span class="positive">
+            <Icon name="trend" size={11} /> 12,4% к прошлому дню
+          </span>
+        </div>
+        <div class="mini-chart" aria-hidden="true">
+          <i style="--h:35%"></i>
+          <i style="--h:55%"></i>
+          <i style="--h:42%"></i>
+          <i style="--h:68%"></i>
+          <i style="--h:58%"></i>
+          <i style="--h:80%"></i>
+          <i style="--h:100%"></i>
+        </div>
+      </div>
+      <table class="chat-table">
+        <caption class="sr-only">Пример сводки продаж за вчера</caption>
+        <thead>
+          <tr>
+            <th>Площадка</th>
+            <th>Выручка</th>
+            <th>Прибыль</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <span class="tiny-logo ozon">O</span> Ozon
+            </td>
+            <td>186 400 ₽</td>
+            <td>32 150 ₽</td>
+          </tr>
+          <tr>
+            <td>
+              <span class="tiny-logo wb">W</span> Wildberries
+            </td>
+            <td>104 800 ₽</td>
+            <td>16 170 ₽</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="chat-insight">
+        <span class="insight-icon">
+          <Icon name="chart" size={17} />
+        </span>
+        <p>
+          <strong>На что обратить внимание</strong>У органайзера на WB маржа упала до 8%: расходы на
+          рекламу выросли. Проверим кампанию?
+        </p>
+      </div>
+      <div class="chat-sources">
+        <Icon name="check" size={13} /> На основе данных Ozon и Wildberries
+      </div>
+    </div>
+    <div class="chat-input">
+      <span>Спросите о своём бизнесе…</span>
+      <span class="send-arrow">↑</span>
+    </div>
+  </div>
+  <div class="chat-floating">
+    <span class="float-icon">
+      <Icon name="shield" size={19} />
+    </span>
+    <div>
+      <strong>Ваши данные под контролем</strong>
+      <small>ИИ только читает. Ничего не меняет.</small>
+    </div>
+  </div>
+  <p class="demo-caption">Пример ответа · демонстрационные данные</p>
+</div>

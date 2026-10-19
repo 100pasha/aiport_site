@@ -1,0 +1,110 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import Icon from '../../components/Icon.astro';
+import { catalog } from '../../lib/catalog';
+import { config } from '../../lib/config';
+---
+
+<Layout
+  title="Каталог сервисов для вашего ИИ"
+  description="Подключения Ozon, Wildberries, CRM, финансов и задач к Claude и ChatGPT. Выберите сервис и следуйте инструкции."
+>
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">ВАШИ СЕРВИСЫ. ОДИН РАЗГОВОР.</span>
+      <h1>
+        Данные уже есть.
+        <br />
+        Осталось задать вопрос.
+      </h1>
+      <p>
+        Подключите привычные инструменты к своему ИИ.
+        <br />
+        Одна ссылка для всех сервисов — и никакой ручной работы.
+      </p>
+    </div>
+  </section>
+  <section class="section section-top">
+    <div class="container">
+      {!config.app && (
+        <p class="notice" style="margin-bottom:25px">
+          Локальный каталог для предварительной версии. Доступность подключений будет подтверждена
+          при запуске платформы.
+        </p>
+      )}
+      <div class="catalog-toolbar">
+        <label class="search-wrap">
+          <span class="sr-only">Найти сервис</span>
+          <Icon name="search" size={18} />
+          <input
+            class="search-input"
+            type="search"
+            placeholder="Найти свой сервис…"
+            data-catalog-search
+          />
+        </label>
+        <label class="sr-only" for="segment">
+          Для кого
+        </label>
+        <select id="segment" class="filter-select" data-segment>
+          <option value="">Для всех</option>
+          <option value="seller">Для селлеров</option>
+          <option value="smb">Для бизнеса</option>
+          <option value="personal">Для себя</option>
+        </select>
+        <label class="sr-only" for="filter-status">
+          Доступность
+        </label>
+        <select id="filter-status" class="filter-select" data-filter-status>
+          <option value="">Любой статус</option>
+          <option value="available">Доступно</option>
+          <option value="soon">Скоро</option>
+        </select>
+      </div>
+      <div class="category-tabs" role="group" aria-label="Категория сервиса">
+        <button data-cat="" class="active" aria-pressed="true">
+          Все сервисы
+        </button>
+        {catalog.categories.map((c) => (
+          <button data-cat={c.id} aria-pressed="false">
+            {c.name}
+          </button>
+        ))}
+      </div>
+      <div class="catalog-meta">
+        <span aria-live="polite">
+          Найдено сервисов: <strong data-result-count>{catalog.services.length}</strong>
+        </span>
+        <button data-reset>Сбросить фильтры</button>
+      </div>
+      <div class="service-grid">
+        {catalog.services.map((s) => (
+          <ServiceCard service={s} />
+        ))}
+        <div class="empty-state" data-empty hidden>
+          <h3>Пока ничего не нашли</h3>
+          <p>Попробуйте другой запрос или сбросьте фильтры.</p>
+        </div>
+      </div>
+      <div class="custom-request">
+        <div>
+          <h3>Не нашли свой сервис?</h3>
+          <p>Расскажите, какое подключение вам нужно. Ваш голос поможет выбрать следующее.</p>
+        </div>
+        <button
+          class="button button-secondary"
+          data-vote="custom"
+          data-service-name="новое подключение"
+        >
+          Предложить сервис <Icon name="arrow" size={17} />
+        </button>
+      </div>
+      <noscript>
+        <p class="notice">
+          Все сервисы доступны выше. Для поиска и фильтрации включите JavaScript.
+        </p>
+      </noscript>
+    </div>
+  </section>
+</Layout>

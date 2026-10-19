@@ -1,0 +1,37 @@
+---
+import { withBase } from '../lib/config';
+import type { CollectionEntry } from 'astro:content';
+const { article: a } = Astro.props as { article: CollectionEntry<'blog'> };
+---
+
+<article class="blog-card">
+  <a href={withBase(`/blog/${a.id}/`)}>
+    <img
+      src={withBase(a.data.cover)}
+      width="720"
+      height="460"
+      alt={`Иллюстрация к статье «${a.data.title}»`}
+      loading="lazy"
+    />
+    <div class="blog-card-content">
+      <div class="blog-card-meta">
+        <time datetime={a.data.date.toISOString()}>
+          {a.data.date.toLocaleDateString('ru-RU', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            timeZone: 'Europe/Moscow',
+          })}
+        </time>{' '}
+        · 4 минуты
+      </div>
+      <h2>{a.data.title}</h2>
+      <p>{a.data.description}</p>
+      <div class="blog-tags">
+        {a.data.tags.map((t) => (
+          <span>{t}</span>
+        ))}
+      </div>
+    </div>
+  </a>
+</article>

@@ -1,0 +1,52 @@
+---
+import { withBase } from '../lib/config';
+import Layout from '../layouts/Layout.astro';
+import Pricing from '../components/Pricing.astro';
+import FAQ from '../components/FAQ.astro';
+import { config } from '../lib/config';
+import { catalog } from '../lib/catalog';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: config.brand,
+  operatingSystem: 'Web',
+  applicationCategory: 'BusinessApplication',
+  offers: [
+    { price: catalog.pricing.month / 100, priceCurrency: 'RUB' },
+    { price: catalog.pricing.year / 100, priceCurrency: 'RUB' },
+  ].map((o) => ({ '@type': 'Offer', ...o })),
+};
+---
+
+<Layout title="Тарифы — все сервисы в одной подписке" schema={schema}>
+  <section class="page-hero">
+    <div class="container center">
+      <span class="eyebrow">БОЛЬШЕ КОНТРОЛЯ. БЕЗ ЛИШНИХ РАСХОДОВ.</span>
+      <h1 style="margin:auto">Один тариф. Все подключения.</h1>
+      <p style="margin-inline:auto">
+        Начните с 7 бесплатных дней. Выберите месяц или год — остальные возможности одинаковые.
+      </p>
+    </div>
+  </section>
+  <section class="section pricing-section">
+    <div class="container">
+      <Pricing />
+    </div>
+  </section>
+  <section class="section">
+    <div class="container faq-layout">
+      <div class="section-heading">
+        <span class="eyebrow">БЕЗ МЕЛКОГО ШРИФТА</span>
+        <h2>До первого платежа</h2>
+        <p>
+          Условия пробного периода, отмены и подписки — в{' '}
+          <a class="text-link" href={withBase('/oferta/')}>
+            оферте
+          </a>
+          .
+        </p>
+      </div>
+      <FAQ />
+    </div>
+  </section>
+</Layout>
