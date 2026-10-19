@@ -21,7 +21,7 @@ const safeStorage = {
     } catch {}
   },
 };
-let consent = safeStorage.get('aiport-consent');
+let consent = safeStorage.get('ligos-consent');
 function track(goal: string, params: Record<string, unknown> = {}) {
   if (consent === 'all' && window.ym && body.dataset.ymId)
     window.ym(Number(body.dataset.ymId), 'reachGoal', goal, params);
@@ -52,7 +52,7 @@ if (!consent && banner) banner.hidden = false;
 document.querySelectorAll<HTMLButtonElement>('[data-consent]').forEach((button) =>
   button.addEventListener('click', () => {
     consent = button.dataset.consent || 'necessary';
-    safeStorage.set('aiport-consent', consent);
+    safeStorage.set('ligos-consent', consent);
     if (banner) banner.hidden = true;
     loadAnalytics();
   }),

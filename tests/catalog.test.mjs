@@ -27,7 +27,7 @@ test('rejects duplicate IDs, invalid pricing, unknown categories and path traver
   }
 });
 async function runSync(app) {
-  const cwd = await mkdtemp(join(tmpdir(), 'aiport-catalog-'));
+  const cwd = await mkdtemp(join(tmpdir(), 'ligos-catalog-'));
   try {
     await mkdir(join(cwd, 'src/data'), { recursive: true });
     await writeFile(join(cwd, 'src/data/catalog.json'), JSON.stringify(local));

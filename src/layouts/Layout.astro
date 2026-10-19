@@ -41,7 +41,9 @@ const nav = [
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#fbfaf7" />
-    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg?v=ligos')} />
+    <link rel="icon" type="image/png" sizes="32x32" href={withBase('/favicon-32.png')} />
+    <link rel="apple-touch-icon" sizes="180x180" href={withBase('/apple-touch-icon.png')} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ru_RU" />
     <meta property="og:title" content={`${title} — ${config.brand}`} />
@@ -90,14 +92,8 @@ const nav = [
     <header class="site-header">
       <div class="container header-inner">
         <a href={withBase('/')} class="logo" aria-label={`${config.brand} — главная`}>
-          <span class="logo-symbol" aria-hidden="true">
-            <i></i>
-            <i></i>
-            <i></i>
-            <i></i>
-          </span>
+          <img class="logo-mark" src={withBase('/logo-mark.svg')} width="29" height="29" alt="" />
           {config.brand}
-          <span class="logo-dot">.</span>
         </a>
         <nav class="desktop-nav" aria-label="Основная навигация">
           {nav.map(([href, label]) => (
@@ -139,14 +135,14 @@ const nav = [
         <div class="footer-top">
           <div class="footer-brand">
             <a href={withBase('/')} class="logo">
-              <span class="logo-symbol" aria-hidden="true">
-                <i></i>
-                <i></i>
-                <i></i>
-                <i></i>
-              </span>
+              <img
+                class="logo-mark"
+                src={withBase('/logo-mark.svg')}
+                width="29"
+                height="29"
+                alt=""
+              />
               {config.brand}
-              <span class="logo-dot">.</span>
             </a>
             <p>
               Ваш бизнес.

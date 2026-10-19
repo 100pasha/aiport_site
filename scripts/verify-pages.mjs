@@ -12,14 +12,15 @@ try {
   page.on('response', (r) => {
     if (r.status() >= 400) errors.push(`HTTP ${r.status()} ${r.url()}`);
   });
-  const origin = 'http://127.0.0.1:4322',
-    base = '/aiport_site';
+  const origin = 'http://127.0.0.1:4322';
+  const site = new URL(process.env.PUBLIC_SITE_URL || 'https://ligos.ru');
+  const base = site.pathname.replace(/\/$/, '');
   await page.goto(origin + base + '/');
   await page.getByRole('button', { name: 'Только необходимые' }).click();
   assert((await page.locator('h1').innerText()).includes('Спросите свой ИИ'));
   assert.equal(
     await page.locator('link[rel=canonical]').getAttribute('href'),
-    'https://100pasha.github.io/aiport_site/',
+    new URL(base + '/', site).href,
   );
   await page.locator('.desktop-nav a').filter({ hasText: 'Сервисы' }).click();
   assert.equal(new URL(page.url()).pathname, base + '/katalog/');
@@ -42,10 +43,11 @@ try {
   );
   const kb = await (await page.request.get(origin + base + '/kb.json')).json();
   assert.equal(kb.articles.length, 33);
-  assert(kb.articles.every((a) => a.url.includes('github.io/aiport_site/')));
+  assert(kb.articles.every((a) => a.url.startsWith(new URL(base + '/', site).href)));
+  assert((await page.title()).endsWith('— Ligos'));
   assert.deepEqual(errors, []);
   console.log(
-    'GitHub Pages path verified: navigation, styles/fonts, filtering, help images, yearly CTA, blog and knowledge-base URLs.',
+    'Deployment paths verified: navigation, styles/fonts, filtering, help images, yearly CTA, blog and knowledge-base URLs.',
   );
 } finally {
   await browser.close();

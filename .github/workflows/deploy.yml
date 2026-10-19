@@ -18,8 +18,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      PUBLIC_BRAND: ${{ vars.PUBLIC_BRAND }}
-      PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || 'https://100pasha.github.io/aiport_site/' }}
+      PUBLIC_BRAND: Ligos
+      PUBLIC_SITE_URL: https://ligos.ru
       PUBLIC_APP_URL: ${{ vars.PUBLIC_APP_URL }}
       PUBLIC_SUPPORT_EMAIL: ${{ vars.PUBLIC_SUPPORT_EMAIL }}
       PUBLIC_YM_ID: ${{ vars.PUBLIC_YM_ID }}

@@ -1,6 +1,6 @@
 ---
-title: "Что такое AIport?"
-description: "Что такое AIport?"
+title: "Что такое Ligos?"
+description: "Что такое Ligos?"
 topic: "Начало работы"
 home: true
 updated: 2026-10-19

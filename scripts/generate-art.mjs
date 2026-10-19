@@ -1,5 +1,5 @@
 import sharp from 'sharp';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 await mkdir('public/img/blog', { recursive: true });
 const svg = (body, bg = '#ecefe3') =>
   `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760"><rect width="1200" height="760" fill="${bg}"/><g font-family="DejaVu Sans,Arial,sans-serif">${body}</g></svg>`;
@@ -18,8 +18,25 @@ for (const [name, source] of Object.entries({ finance, morning, security }))
     .resize(900)
     .webp({ quality: 85 })
     .toFile(`public/img/blog/${name}.webp`);
+const mark = await readFile('public/logo-mark.svg', 'utf8');
+await writeFile('public/favicon.svg', mark);
+const markBody = mark.replace(/^.*?<svg[^>]*>/s, '').replace(/<\/svg>\s*$/, '');
 const og = svg(
-  `<text x="100" y="150" font-size="50" font-weight="700" fill="#c94c2e">AIport.</text><text x="100" y="310" font-size="74" font-weight="600" fill="#242b28">Спросите свой ИИ,</text><text x="100" y="405" font-size="74" font-weight="600" fill="#242b28">как дела в бизнесе.</text><text x="100" y="510" font-size="27" fill="#69716b">Все ваши кабинеты — в одном разговоре.</text><rect x="100" y="565" width="340" height="65" rx="12" fill="#c94c2e"/><text x="270" y="606" text-anchor="middle" font-size="23" fill="white">7 дней бесплатно →</text>`,
+  `<g transform="translate(100 96)">${markBody}</g><text x="182" y="147" font-size="50" font-weight="700" fill="#242b28">Ligos</text><text x="100" y="310" font-size="74" font-weight="600" fill="#242b28">Спросите свой ИИ,</text><text x="100" y="405" font-size="74" font-weight="600" fill="#242b28">как дела в бизнесе.</text><text x="100" y="510" font-size="27" fill="#69716b">Все ваши кабинеты — в одном разговоре.</text><rect x="100" y="565" width="340" height="65" rx="12" fill="#c94c2e"/><text x="270" y="606" text-anchor="middle" font-size="23" fill="white">7 дней бесплатно →</text>`,
   '#fbfaf7',
 );
 await sharp(Buffer.from(og)).resize(1200, 630, { fit: 'fill' }).png().toFile('public/img/og.png');
+
+await sharp(Buffer.from(mark)).resize(180).png().toFile('public/apple-touch-icon.png');
+const favicon = await sharp(Buffer.from(mark)).resize(32).png().toBuffer();
+await writeFile('public/favicon-32.png', favicon);
+const icoHeader = Buffer.alloc(22);
+icoHeader.writeUInt16LE(1, 2);
+icoHeader.writeUInt16LE(1, 4);
+icoHeader.writeUInt8(32, 6);
+icoHeader.writeUInt8(32, 7);
+icoHeader.writeUInt16LE(1, 10);
+icoHeader.writeUInt16LE(32, 12);
+icoHeader.writeUInt32LE(favicon.length, 14);
+icoHeader.writeUInt32LE(22, 18);
+await writeFile('public/favicon.ico', Buffer.concat([icoHeader, favicon]));

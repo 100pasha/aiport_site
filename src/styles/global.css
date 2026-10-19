@@ -218,24 +218,6 @@ p {
   line-height: 1;
   flex-shrink: 0;
 }
-.logo-dot {
-  color: var(--accent);
-}
-.logo-symbol {
-  display: grid;
-  grid-template-columns: repeat(2, 8px);
-  grid-template-rows: repeat(2, 8px);
-  gap: 3px;
-  transform: rotate(-9deg);
-  margin-right: 10px;
-}
-.logo-symbol i {
-  border-radius: 2px;
-  background: var(--accent);
-}
-.logo-symbol i:last-child {
-  background: #edaa87;
-}
 .desktop-nav {
   display: flex;
   align-items: center;
@@ -2735,4 +2717,10 @@ p {
   .button > svg {
     flex-shrink: 0;
   }
+}
+
+.logo-mark {
+  margin-right: 10px;
+  border-radius: 8px;
+  flex-shrink: 0;
 }
