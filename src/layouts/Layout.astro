@@ -18,7 +18,7 @@ const {
   title,
   description = `${Astro.props.title}. Подключите свой ИИ к данным бизнеса. Только чтение, простое подключение и 7 дней бесплатно.`,
   schema,
-  image = '/img/og.png',
+  image = '/img/og.png?v=ligos-1',
   noindex = false,
   waitlist = false,
 } = Astro.props;
@@ -41,9 +41,13 @@ const nav = [
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#fbfaf7" />
-    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg?v=ligos')} />
-    <link rel="icon" type="image/png" sizes="32x32" href={withBase('/favicon-32.png')} />
-    <link rel="apple-touch-icon" sizes="180x180" href={withBase('/apple-touch-icon.png')} />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg?v=ligos-1')} />
+    <link rel="icon" type="image/png" sizes="32x32" href={withBase('/favicon-32.png?v=ligos-1')} />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href={withBase('/apple-touch-icon.png?v=ligos-1')}
+    />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ru_RU" />
     <meta property="og:title" content={`${title} — ${config.brand}`} />
@@ -92,7 +96,13 @@ const nav = [
     <header class="site-header">
       <div class="container header-inner">
         <a href={withBase('/')} class="logo" aria-label={`${config.brand} — главная`}>
-          <img class="logo-mark" src={withBase('/logo-mark.svg')} width="29" height="29" alt="" />
+          <img
+            class="logo-mark"
+            src={withBase('/logo-mark.svg?v=ligos-1')}
+            width="29"
+            height="29"
+            alt=""
+          />
           {config.brand}
         </a>
         <nav class="desktop-nav" aria-label="Основная навигация">
@@ -137,7 +147,7 @@ const nav = [
             <a href={withBase('/')} class="logo">
               <img
                 class="logo-mark"
-                src={withBase('/logo-mark.svg')}
+                src={withBase('/logo-mark.svg?v=ligos-1')}
                 width="29"
                 height="29"
                 alt=""

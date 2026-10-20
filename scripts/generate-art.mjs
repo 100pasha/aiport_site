@@ -40,3 +40,13 @@ icoHeader.writeUInt16LE(32, 12);
 icoHeader.writeUInt32LE(favicon.length, 14);
 icoHeader.writeUInt32LE(22, 18);
 await writeFile('public/favicon.ico', Buffer.concat([icoHeader, favicon]));
+
+await mkdir('public/brand', { recursive: true });
+for (const size of [4096, 1024, 512, 256, 128, 64, 32, 16]) {
+  await sharp(Buffer.from(mark), { density: size > 1024 ? 288 : 72 })
+    .resize(size)
+    .png()
+    .toFile(`public/brand/ligos-icon-${size}.png`);
+}
+
+await writeFile('public/brand/ligos-icon.svg', mark);
