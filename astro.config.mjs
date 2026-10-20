@@ -5,7 +5,7 @@ try {
 }
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-const domain = new URL(process.env.PUBLIC_SITE_URL || 'https://ligos.ru');
+const domain = new URL(process.env.PUBLIC_SITE_URL || 'https://ligos.io');
 const base = domain.pathname.replace(/\/$/, '');
 // Markdown image/link URLs use the same prefix as Astro components.
 function prefixContentLinks() {

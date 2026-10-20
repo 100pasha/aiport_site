@@ -4,7 +4,7 @@ try {
   if (error.code !== 'ENOENT') throw error;
 }
 import { writeFile, copyFile, rm } from 'node:fs/promises';
-const url = new URL(process.env.PUBLIC_SITE_URL || 'https://ligos.ru');
+const url = new URL(process.env.PUBLIC_SITE_URL || 'https://ligos.io');
 if (!url.hostname.endsWith('.github.io')) {
   await writeFile('dist/CNAME', url.hostname + '\n');
 } else {

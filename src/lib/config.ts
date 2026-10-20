@@ -1,6 +1,6 @@
 export const config = {
   brand: import.meta.env.PUBLIC_BRAND || 'Ligos',
-  site: (import.meta.env.PUBLIC_SITE_URL || 'https://ligos.ru').replace(/\/$/, ''),
+  site: (import.meta.env.PUBLIC_SITE_URL || 'https://ligos.io').replace(/\/$/, ''),
   app: (import.meta.env.PUBLIC_APP_URL || '').replace(/\/$/, ''),
   email: import.meta.env.PUBLIC_SUPPORT_EMAIL || '',
   ymId: import.meta.env.PUBLIC_YM_ID || '',

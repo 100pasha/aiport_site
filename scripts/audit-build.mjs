@@ -21,7 +21,7 @@ const known = new Set(files);
 const titles = new Set();
 const descriptions = new Set();
 let links = 0;
-const base = new URL(process.env.PUBLIC_SITE_URL || 'https://ligos.ru').pathname.replace(/\/$/, '');
+const base = new URL(process.env.PUBLIC_SITE_URL || 'https://ligos.io').pathname.replace(/\/$/, '');
 function pathExists(path) {
   if (base) {
     if (!path.startsWith(base + '/') && path !== base) return false;

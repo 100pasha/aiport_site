@@ -13,7 +13,7 @@ try {
     if (r.status() >= 400) errors.push(`HTTP ${r.status()} ${r.url()}`);
   });
   const origin = 'http://127.0.0.1:4322';
-  const site = new URL(process.env.PUBLIC_SITE_URL || 'https://ligos.ru');
+  const site = new URL(process.env.PUBLIC_SITE_URL || 'https://ligos.io');
   const base = site.pathname.replace(/\/$/, '');
   await page.goto(origin + base + '/');
   await page.getByRole('button', { name: 'Только необходимые' }).click();
