@@ -6,6 +6,7 @@ import { config, appLink } from '../lib/config';
 import Icon from '../components/Icon.astro';
 import CTA from '../components/CTA.astro';
 import { catalog } from '../lib/catalog';
+import { siteVersion } from '../lib/version';
 interface Props {
   title: string;
   description?: string;
@@ -201,6 +202,7 @@ const nav = [
             ? `${config.legalName} · ИНН ${config.inn || 'не указан'} · ОГРНИП ${config.ogrnip || 'не указан'}`
             : 'Предварительная версия. Реквизиты оператора и условия сервиса будут опубликованы до начала продаж.'}
         </p>
+        <p class="site-version">Версия сайта: {siteVersion}</p>
       </div>
     </footer>
     <div class="cookie-banner" data-cookie-banner hidden>

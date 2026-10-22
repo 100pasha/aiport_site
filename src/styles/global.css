@@ -1175,6 +1175,12 @@ p {
   margin-top: 17px;
   max-width: 750px;
 }
+.site-version {
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
 .support-fab {
   position: fixed;
   bottom: 25px;
