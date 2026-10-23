@@ -22,7 +22,7 @@ jobs:
       PUBLIC_SITE_URL: https://ligos.io
       PUBLIC_APP_URL: https://app.ligos.io
       PUBLIC_SUPPORT_EMAIL: ${{ vars.PUBLIC_SUPPORT_EMAIL }}
-      PUBLIC_YM_ID: ${{ vars.PUBLIC_YM_ID }}
+      PUBLIC_YM_ID: "113749976"
       PUBLIC_LEGAL_NAME: ${{ vars.PUBLIC_LEGAL_NAME }}
       PUBLIC_LEGAL_INN: ${{ vars.PUBLIC_LEGAL_INN }}
       PUBLIC_LEGAL_OGRNIP: ${{ vars.PUBLIC_LEGAL_OGRNIP }}
