@@ -90,6 +90,7 @@ const nav = [
     data-site={config.site}
     data-ym-id={config.ymId}
     data-email={config.email}
+    data-support-chat={String(config.supportChat)}
   >
     <a class="skip-link" href="#main">
       Перейти к содержимому
@@ -221,10 +222,12 @@ const nav = [
         </button>
       </div>
     </div>
-    <button class="support-fab" data-support aria-label="Есть вопрос? Открыть поддержку">
-      <Icon name="chat" size={23} />
-      <span>Есть вопрос?</span>
-    </button>
+    {config.supportChat && (
+      <button class="support-fab" data-support aria-label="Есть вопрос? Открыть поддержку">
+        <Icon name="chat" size={23} />
+        <span>Есть вопрос?</span>
+      </button>
+    )}
     <div class="mobile-sticky">
       <a href={appLink('/login')} class="button" data-cta="mobile_login">
         Войти <Icon name="arrow" size={18} />

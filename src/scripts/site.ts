@@ -264,7 +264,7 @@ document.querySelectorAll<HTMLDialogElement>('dialog').forEach((dialog) => {
 });
 let widgetLoaded = false;
 function loadWidget() {
-  if (!app || widgetLoaded) return;
+  if (!app || widgetLoaded || document.body.dataset.supportChat !== 'true') return;
   widgetLoaded = true;
   const s = document.createElement('script');
   s.src = app + '/widget/chat.js';

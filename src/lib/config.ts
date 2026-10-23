@@ -8,6 +8,8 @@ export const config = {
   inn: import.meta.env.PUBLIC_LEGAL_INN || '',
   ogrnip: import.meta.env.PUBLIC_LEGAL_OGRNIP || '',
   verification: import.meta.env.PUBLIC_YANDEX_VERIFICATION || '',
+  // Floating support chat (button + remote widget). Off until PUBLIC_SUPPORT_CHAT=true.
+  supportChat: import.meta.env.PUBLIC_SUPPORT_CHAT === 'true',
   securityVerified: import.meta.env.PUBLIC_SECURITY_VERIFIED === 'true',
 };
 // Keep both a custom domain and GitHub project Pages working from the same source.
