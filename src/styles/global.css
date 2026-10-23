@@ -2469,7 +2469,7 @@ p {
   .support-fab > span {
     display: none;
   }
-  .mobile-sticky:not([hidden]) {
+  .mobile-sticky {
     display: block;
     position: fixed;
     bottom: 0;
@@ -2477,20 +2477,23 @@ p {
     right: 0;
     background: #fbfaf7f5;
     border-top: 1px solid var(--line);
-    padding: 10px 76px 10px 16px;
+    padding: 10px 76px calc(10px + env(safe-area-inset-bottom)) 16px;
     z-index: 34;
     backdrop-filter: blur(12px);
   }
   .mobile-sticky .button {
     width: 100%;
-    min-height: 44px;
-    font-size: 11px;
+    min-height: 48px;
+    font-size: 16px;
   }
-  .mobile-sticky:not([hidden]) ~ * {
-    scroll-padding-bottom: 70px;
+  html {
+    scroll-padding-bottom: 76px;
   }
-  body:has(.mobile-sticky:not([hidden])) .support-fab {
-    bottom: 9px;
+  body {
+    padding-bottom: calc(68px + env(safe-area-inset-bottom));
+  }
+  .support-fab {
+    bottom: calc(11px + env(safe-area-inset-bottom));
   }
   .cookie-banner {
     bottom: 12px;

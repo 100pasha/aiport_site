@@ -225,14 +225,10 @@ const nav = [
       <Icon name="chat" size={23} />
       <span>Есть вопрос?</span>
     </button>
-    <div class="mobile-sticky" data-sticky hidden>
-      {waitlist ? (
-        <button class="button" data-vote="personal" data-service-name="ваш сервис">
-          Узнать о запуске <Icon name="arrow" size={16} />
-        </button>
-      ) : (
-        <CTA block="mobile_sticky" label="Попробовать бесплатно" />
-      )}
+    <div class="mobile-sticky">
+      <a href={appLink('/login')} class="button" data-cta="mobile_login">
+        Войти <Icon name="arrow" size={18} />
+      </a>
     </div>
     <dialog id="vote-dialog" class="modal" aria-labelledby="vote-title">
       <button class="modal-close" data-close aria-label="Закрыть окно">

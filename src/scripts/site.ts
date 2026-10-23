@@ -290,13 +290,4 @@ document.querySelectorAll('[data-support]').forEach((button) =>
     track('chat_open');
   }),
 );
-const hero = document.querySelector('.hero');
-const sticky = document.querySelector<HTMLElement>('[data-sticky]');
-if (hero && sticky)
-  new IntersectionObserver(
-    ([entry]) => {
-      sticky.hidden = entry.isIntersecting;
-    },
-    { threshold: 0 },
-  ).observe(hero);
 export {};
