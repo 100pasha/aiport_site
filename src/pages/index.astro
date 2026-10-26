@@ -1,5 +1,79 @@
 ---
-import Landing from '../components/Landing.astro';
+import { config, withBase, absoluteUrl } from '../lib/config';
+import content from '../components/homepage.html?raw';
+import '../styles/homepage.css';
+const title = 'Данные бизнеса — в вашем ИИ';
+const description = 'Сопоставляйте продажи, остатки, рабочие чаты и финансы в своём ИИ. Ligos объединяет первоисточники бизнеса. Один сервис бесплатно навсегда.';
+const canonical = absoluteUrl('/');
+const image = '/img/og.png?v=ligos-2';
+const noindex = false;
+const schema = {'@context':'https://schema.org','@type':'SoftwareApplication',name:'Ligos',applicationCategory:'BusinessApplication',operatingSystem:'Web',offers:[{'@type':'Offer',price:0,priceCurrency:'RUB'},{'@type':'Offer',price:490,priceCurrency:'RUB'},{'@type':'Offer',price:4000,priceCurrency:'RUB'}]};
+const html = content.replace(/(href|src)="(\/[^"]*)"/g, (_, attr, path) => `${attr}="${withBase(path)}"`);
 ---
-
-<Landing segment="seller" />
+<!doctype html><html lang="ru"><head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} — {config.brand}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#fbfaf7" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg?v=ligos-1')} />
+    <link rel="icon" type="image/png" sizes="32x32" href={withBase('/favicon-32.png?v=ligos-1')} />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href={withBase('/apple-touch-icon.png?v=ligos-1')}
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:title" content={`${title} — ${config.brand}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={absoluteUrl(image)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {config.verification && <meta name="yandex-verification" content={config.verification} />}
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`Блог ${config.brand}`}
+      href={withBase('/rss.xml')}
+    />
+    <link
+      rel="preload"
+      as="font"
+      href={withBase('/fonts/onest-cyrillic.woff2')}
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      href={withBase('/fonts/onest-latin.woff2')}
+      type="font/woff2"
+      crossorigin
+    />
+    {schema && (
+      <script
+        type="application/ld+json"
+        set:html={JSON.stringify(schema).replace(/</g, '\\u003c')}
+      />
+    )}
+  </head><body data-app={config.app} data-site={config.site} data-ym-id={config.ymId} data-email={config.email}><a class="skip-link" href="#main">Перейти к содержимому</a><Fragment set:html={html} /><div class="cookie-banner" data-cookie-banner hidden>
+      <div>
+        <strong>Немного о cookie</strong>
+        <p>
+          Мы используем cookie для аналитики. <a href={withBase('/politika/')}>Подробнее</a>
+        </p>
+      </div>
+      <div class="cookie-actions">
+        <button class="button button-secondary" data-consent="necessary">
+          Только необходимые
+        </button>
+        <button class="button" data-consent="all">
+          Принять
+        </button>
+      </div>
+    </div>
+    <script>import '../scripts/homepage.js';import '../scripts/site';</script></body></html>

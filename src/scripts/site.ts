@@ -118,7 +118,7 @@ document.querySelectorAll<HTMLElement>('[data-pricing]').forEach((card) => {
       card.querySelector('[data-period]')!.textContent = year ? '/ год' : '/ месяц';
       card.querySelector('[data-price-detail]')!.textContent = year
         ? 'Оплата за год · фиксированная цена на 12 месяцев'
-        : 'После 7 бесплатных дней';
+        : 'Чтение данных из всех подключённых сервисов';
       const cta = card.querySelector<HTMLAnchorElement>('[data-cta]')!;
       const path = `/signup?plan=${year ? 'year' : 'month'}`;
       cta.href = app ? app + path : withBase('/platform/?next=' + encodeURIComponent(path));
@@ -209,7 +209,7 @@ document.querySelectorAll<HTMLElement>('[data-vote]').forEach((button) =>
     voteDialog.showModal();
   }),
 );
-voteForm.addEventListener('submit', async (event) => {
+voteForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!voteForm.reportValidity()) return;
   const message = voteForm.querySelector<HTMLElement>('.form-message')!;

@@ -1,12 +1,13 @@
 ---
+import { brandAssets } from '../lib/brand-assets';
 import { withBase } from '../lib/config';
 import type { Service } from '../lib/catalog';
 const { service: s } = Astro.props as { service: Service };
 ---
 
 <span class="service-mark" style={`--service-color:${s.color || '#596773'}`}>
-  {s.icon_url ? (
-    <img src={withBase(s.icon_url)} alt="" width="28" height="28" loading="lazy" />
+  {(brandAssets[s.id] || s.icon_url) ? (
+    <img src={withBase(brandAssets[s.id] || s.icon_url)} alt="" width="28" height="28" loading="lazy" />
   ) : (
     <span>{s.mark || s.name.slice(0, 2)}</span>
   )}

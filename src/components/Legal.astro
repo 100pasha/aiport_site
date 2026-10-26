@@ -20,7 +20,7 @@ const { title } = Astro.props;
       </div>
       <p>
         <strong>Оператор:</strong> {config.legalName || '{ИП_ФИО}'}. ИНН: {config.inn || '{ИП_ИНН}'}
-        . ОГРНИП: {config.ogrnip || '{ИП_ОГРНИП}'}. Контакт: {config.email || '{EMAIL}'}.
+        . ОГРНИП: {config.ogrnip || '{ИП_ОГРНИП}'}. Контакт: {config.email || 'Telegram: @pavel_stoyanov'}.
       </p>
       <slot />
     </div>

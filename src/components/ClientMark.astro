@@ -1,5 +1,7 @@
 ---
 import Icon from './Icon.astro';
+import { brandAssets } from '../lib/brand-assets';
+import { withBase } from '../lib/config';
 import { clients } from '../lib/catalog';
 interface Props {
   client: (typeof clients)[number];
@@ -8,5 +10,5 @@ const { client: c } = Astro.props;
 ---
 
 <span class="client-symbol" style={`--client-color:${c.color}`} aria-hidden="true">
-  {c.id === 'claude' ? <Icon name="asterisk" size={27} /> : c.symbol}
+  {brandAssets[c.id] ? <img src={withBase(brandAssets[c.id])} alt="" width="28" height="28" /> : c.id === 'claude' ? <Icon name="asterisk" size={27} /> : c.symbol}
 </span>

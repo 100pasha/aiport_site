@@ -16,22 +16,22 @@
 }
 :root {
   --font: 'Onest', system-ui, sans-serif;
-  --bg: #fbfaf7;
+  --bg: #fafaf9;
   --surface: #fff;
-  --ink: #242b28;
-  --muted: #5e685f;
-  --accent: #b94125;
-  --accent-hover: #ac3c21;
-  --accent-soft: #f8eae2;
-  --green: #38674d;
-  --green-soft: #edf3eb;
+  --ink: #191917;
+  --muted: #5c5b56;
+  --accent: #2f5bea;
+  --accent-hover: #2549c9;
+  --accent-soft: #eef2ff;
+  --green: #18794a;
+  --green-soft: #eef6f0;
   --soon: #836224;
   --soon-soft: #f8f0dd;
-  --line: #e8e7df;
-  --radius: 12px;
-  --radius-lg: 20px;
+  --line: #e7e6e2;
+  --radius: 16px;
+  --radius-lg: 16px;
   --max-width: 1120px;
-  --section-gap: 108px;
+  --section-gap: 80px;
   --shadow: 0 20px 60px #262c2410;
   --space-1: 4px;
   --space-2: 8px;
