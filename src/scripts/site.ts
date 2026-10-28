@@ -7,29 +7,13 @@ declare global {
 }
 const body = document.body;
 const app = body.dataset.app || '';
-const safeStorage = {
-  get: (key: string) => {
-    try {
-      return localStorage.getItem(key);
-    } catch {
-      return null;
-    }
-  },
-  set: (key: string, value: string) => {
-    try {
-      localStorage.setItem(key, value);
-    } catch {}
-  },
-};
-let consent = safeStorage.get('ligos-consent');
 function track(goal: string, params: Record<string, unknown> = {}) {
-  if (consent === 'all' && window.ym && body.dataset.ymId)
+  if (window.ym && body.dataset.ymId)
     window.ym(Number(body.dataset.ymId), 'reachGoal', goal, params);
 }
 function loadAnalytics() {
   const id = body.dataset.ymId;
-  if (consent !== 'all' || !id || !/^\d+$/.test(id) || document.querySelector('[data-metrika]'))
-    return;
+  if (!id || !/^\d+$/.test(id) || document.querySelector('[data-metrika]')) return;
   const queue: unknown[][] = [];
   window.ym = (...args) => {
     queue.push(args);
@@ -47,16 +31,6 @@ function loadAnalytics() {
     webvisor: true,
   });
 }
-const banner = document.querySelector<HTMLElement>('[data-cookie-banner]');
-if (!consent && banner) banner.hidden = false;
-document.querySelectorAll<HTMLButtonElement>('[data-consent]').forEach((button) =>
-  button.addEventListener('click', () => {
-    consent = button.dataset.consent || 'necessary';
-    safeStorage.set('ligos-consent', consent);
-    if (banner) banner.hidden = true;
-    loadAnalytics();
-  }),
-);
 loadAnalytics();
 function hasCookie(name: string) {
   return document.cookie.split(';').some((v) => v.trim().startsWith(name + '='));

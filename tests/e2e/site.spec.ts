@@ -99,9 +99,7 @@ test('platform vote honors errors and confirms only accepted API responses', asy
   await expect(page.locator('.form-message')).toContainText('Сообщим, когда подключим');
   expect(payload).toEqual({ service_id: 'whoop', email: 'test@example.com' });
 });
-test('analytics loads only after explicit consent and CTA includes goal block', async ({
-  page,
-}) => {
+test('analytics loads on page visit and CTA includes goal block', async ({ page }) => {
   await page.route('**/tseny/', async (route) => {
     const r = await route.fetch();
     await route.fulfill({
@@ -118,8 +116,7 @@ test('analytics loads only after explicit consent and CTA includes goal block', 
     });
   });
   await page.goto('/tseny/');
-  expect(requests).toBe(0);
-  await page.getByRole('button', { name: 'Принять', exact: true }).click();
+  await expect(page.locator('[data-cookie-banner]')).toHaveCount(0);
   await expect.poll(() => requests).toBe(1);
   await page
     .locator('[data-pricing] [data-cta]')
