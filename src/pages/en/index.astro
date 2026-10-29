@@ -1,0 +1,106 @@
+---
+import { config, withBase, absoluteUrl } from '../../lib/config';
+import content from '../../components/homepage-en.html?raw';
+import '../../styles/homepage.css';
+const title = 'Your business data, in your AI';
+const description =
+  'Compare sales, inventory, team chats and finances in your AI. Ligos connects your business data sources. One service is free forever.';
+const canonical = absoluteUrl('/en/');
+const image = '/img/og.png?v=ligos-2';
+const noindex = false;
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Ligos',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  offers: [
+    { '@type': 'Offer', price: 0, priceCurrency: 'RUB' },
+    { '@type': 'Offer', price: 490, priceCurrency: 'RUB' },
+    { '@type': 'Offer', price: 4000, priceCurrency: 'RUB' },
+  ],
+};
+const html = content.replace(
+  /(href|src)="(\/[^"]*)"/g,
+  (_, attr, path) => `${attr}="${withBase(path)}"`,
+);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} — {config.brand}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} /><link rel="alternate" hreflang="en" href="https://ligos.io/en/"/><link rel="alternate" hreflang="ru" href="https://ligos.io/"/>
+    <meta name="theme-color" content="#fbfaf7" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href={withBase('/favicon-ligos-square.svg?v=ligos-square-3')}
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href={withBase('/favicon-32.png?v=ligos-square-3')}
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href={withBase('/apple-touch-icon.png?v=ligos-square-3')}
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content={`${title} — ${config.brand}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={absoluteUrl(image)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {config.verification && <meta name="yandex-verification" content={config.verification} />}
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${config.brand} blog (Russian)`}
+      href={withBase('/rss.xml')}
+    />
+    <link
+      rel="preload"
+      as="font"
+      href={withBase('/fonts/onest-cyrillic.woff2')}
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      href={withBase('/fonts/onest-latin.woff2')}
+      type="font/woff2"
+      crossorigin
+    />
+    {schema && (
+      <script
+        type="application/ld+json"
+        set:html={JSON.stringify(schema).replace(/</g, '\\u003c')}
+      />
+    )}
+  </head>
+  <body
+    data-app={config.app}
+    data-site={config.site}
+    data-ym-id={config.ymId}
+    data-email={config.email}
+  >
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
+    <Fragment set:html={html} />
+    <script>
+      import '../../scripts/homepage-en.js';
+      import '../../scripts/site';
+    </script>
+  </body>
+</html>
