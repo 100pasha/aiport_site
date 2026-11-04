@@ -228,6 +228,23 @@ const schema = {
       <ChatMockup />
     </div>
   </section>
+  {personal && (
+    <section class="section" aria-labelledby="whoop-landing-title">
+      <div class="container">
+        <div class="aside-card">
+          <span class="eyebrow">Ligos × WHOOP</span>
+          <h2 id="whoop-landing-title">Ваш WHOOP — в ChatGPT</h2>
+          <p>
+            Сон, восстановление и нагрузка в одном разговоре. Готовые вопросы, сводка для тренера и
+            подключение по шагам.
+          </p>
+          <a class="button" href={withBase('/whoop/')} data-cta="personal_whoop">
+            Подключить WHOOP <Icon name="arrow" size={18} />
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
   <section class="service-strip">
     <div class="container">
       <p class="strip-caption">
