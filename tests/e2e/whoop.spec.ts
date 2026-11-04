@@ -1,10 +1,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-test('WHOOP signup retains the service selection and landing attribution', async ({
-  page,
-  context,
-}) => {
+test('WHOOP opens the guest chat and retains landing attribution', async ({ page, context }) => {
   await page.goto('/whoop/?ref=coach-42&utm_source=whoop');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Ваш WHOOP.');
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
@@ -13,8 +10,8 @@ test('WHOOP signup retains the service selection and landing attribution', async
   );
   for (const link of await page.locator('[data-cta]').all()) {
     const url = new URL((await link.getAttribute('href'))!);
-    expect(url.pathname).toBe('/signup');
-    expect(url.searchParams.get('next')).toBe('/?service=whoop');
+    expect(url.pathname).toBe('/whoop');
+    expect(url.searchParams.has('next')).toBe(false);
   }
   const cookies = await context.cookies();
   expect(decodeURIComponent(cookies.find((c) => c.name === 'ref')!.value)).toBe('coach-42');
