@@ -1,0 +1,49 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+const { title, description, path, kicker } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title} — Ligos</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={`https://ligos.io${path}`} />
+    <link rel="icon" href="/favicon-ligos-square.svg" />
+  </head>
+  <body>
+    <header>
+      <a href="/en/" class="brand"><img src="/logo-mark.svg" width="32" height="32" alt="" /> Ligos</a>
+      <a href="https://t.me/pavel_stoyanov">Contact us ↗</a>
+    </header>
+    <main>
+      <p class="kicker">{kicker}</p>
+      <h1>{title}</h1>
+      <slot />
+    </main>
+    <footer>
+      © 2026 Ligos · <a href="/en/">Website</a> · <a href="/en/privacy/">Privacy Policy</a> ·
+      <a href="/en/terms/">Terms of Service</a> · <a href="/en/support/">Support</a> ·
+      <a href="/oferta/">Russian terms</a>
+    </footer>
+    <style is:global>
+      body{background:#fafaf9;color:#191b18;font-family:Onest,Arial,sans-serif}
+      header,main,footer{max-width:860px;margin:auto;padding:24px}
+      header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e1e3dc}
+      .brand{display:flex;align-items:center;gap:10px;font-size:25px;font-weight:700;text-decoration:none;color:inherit}
+      main{padding-top:52px;padding-bottom:60px}
+      h1{font-size:clamp(34px,5vw,52px);line-height:1.1;letter-spacing:-1.8px;margin:15px 0 22px}
+      h2{font-size:23px;margin:34px 0 12px}
+      p,li{font-size:16px;line-height:1.75;color:#53584e}
+      li{margin:10px 0}
+      .intro{font-size:19px}
+      .kicker{font-size:11px;letter-spacing:1px}
+      a{color:#3158ef}
+      footer{border-top:1px solid #e1e3dc;font-size:13px}
+      ul{padding-left:22px}
+    </style>
+  </body>
+</html>

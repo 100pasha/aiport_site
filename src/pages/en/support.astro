@@ -1,0 +1,80 @@
+---
+import EnPage from '../../components/EnPage.astro';
+---
+
+<EnPage
+  title="Support"
+  kicker="HELP · LIGOS"
+  path="/en/support/"
+  description="Get help with Ligos: contact us, connect services, manage your account, billing and privacy requests."
+>
+  <p class="intro">
+    Need help with Ligos? Message us and we will reply as soon as we can. You can also find answers
+    to common questions below.
+  </p>
+
+  <h2>Contact us</h2>
+  <ul>
+    <li>
+      <strong>Telegram:</strong>
+      <a href="https://t.me/pavel_stoyanov">@pavel_stoyanov</a>
+    </li>
+    <li>
+      <strong>Your account:</strong>
+      <a href="https://app.ligos.io/login">app.ligos.io</a>
+    </li>
+  </ul>
+  <p>
+    To help us answer faster, tell us which AI client you use (for example ChatGPT or Claude),
+    which service you are connecting, what you expected and what happened instead, and any error
+    message you saw. Please do not send passwords, API keys or access tokens in a message.
+  </p>
+
+  <h2>Getting started</h2>
+  <ul>
+    <li>Sign up or sign in at <a href="https://app.ligos.io/login">app.ligos.io</a>.</li>
+    <li>Choose a service from the catalogue and follow the connection guide. Guides for each service are available in your account and at <a href="/katalog/">ligos.io/katalog/</a> (Russian).</li>
+    <li>Copy your Ligos connection link into your AI client, then ask a question in plain language.</li>
+  </ul>
+
+  <h2>Common questions</h2>
+  <h3>The AI cannot see my data</h3>
+  <p>
+    Check that the service shows as connected in your account, that the API key has not expired or
+    been revoked, and that it has the permissions needed for the data you are asking about. Then
+    start a new conversation in your AI client and try again. Available data depends on the
+    permissions and API methods of each service.
+  </p>
+  <h3>Can Ligos change my data?</h3>
+  <p>
+    Ligos connections are read-only unless a service is explicitly described otherwise. Use API
+    keys with read-only permissions where the service allows it.
+  </p>
+  <h3>How do I disconnect a service?</h3>
+  <p>
+    Remove the connection in your account, and revoke the API key or authorisation in the service
+    itself. Revoking stops future access; it does not remove information already delivered to your
+    AI provider, which follows that provider’s own policies.
+  </p>
+  <h3>How do I cancel my subscription or ask for a refund?</h3>
+  <p>
+    Cancel in your account to stop future charges; access normally continues until the end of the
+    paid period. For refund questions, message us with the email of your account and the payment
+    date. See the <a href="/en/terms/">Terms of Service</a> for details.
+  </p>
+  <h3>How do I delete my account or my data?</h3>
+  <p>
+    Message us from the contact above and we will help. See the
+    <a href="/en/privacy/">Privacy Policy</a> for how we handle requests about personal data.
+  </p>
+  <h3>I think I found a security problem</h3>
+  <p>
+    Please message us on Telegram with a short description and steps to reproduce, and do not
+    include real secrets. We will look at it promptly.
+  </p>
+
+  <h2>Legal</h2>
+  <p>
+    <a href="/en/privacy/">Privacy Policy</a> · <a href="/en/terms/">Terms of Service</a>
+  </p>
+</EnPage>
