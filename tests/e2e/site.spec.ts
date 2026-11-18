@@ -29,7 +29,7 @@ test('catalog combines filters, persists URL and handles no matches', async ({ p
 });
 test('vote fallback does not claim to send or retain the email', async ({ page }) => {
   await page.goto('/katalog/?status=soon');
-  await page.locator('[data-vote="whoop"]').click();
+  await page.locator('[data-vote="vkusvill"]').click();
   await page.locator('#vote-form input[type=email]').fill('test@example.com');
   await page.locator('#vote-form input[type=checkbox]').check();
   await page.locator('#vote-form button[type=submit]').click();
@@ -89,7 +89,7 @@ test('platform vote honors errors and confirms only accepted API responses', asy
     } else await route.fulfill({ status: 200, body: '' });
   });
   await page.goto('/katalog/');
-  await page.locator('[data-vote="whoop"]').click();
+  await page.locator('[data-vote="vkusvill"]').click();
   await page.locator('#vote-form input[type=email]').fill('test@example.com');
   await page.locator('#vote-form input[type=checkbox]').check();
   await page.locator('#vote-form button[type=submit]').click();
@@ -97,7 +97,7 @@ test('platform vote honors errors and confirms only accepted API responses', asy
   status = 201;
   await page.locator('#vote-form button[type=submit]').click();
   await expect(page.locator('.form-message')).toContainText('Сообщим, когда подключим');
-  expect(payload).toEqual({ service_id: 'whoop', email: 'test@example.com' });
+  expect(payload).toEqual({ service_id: 'vkusvill', email: 'test@example.com' });
 });
 test('analytics loads on page visit and CTA includes goal block', async ({ page }) => {
   await page.route('**/tseny/', async (route) => {
@@ -119,14 +119,20 @@ test('analytics loads on page visit and CTA includes goal block', async ({ page 
   await expect(page.locator('[data-cookie-banner]')).toHaveCount(0);
   await expect.poll(() => requests).toBe(1);
   await page
-    .locator('[data-pricing] [data-cta]')
+    .locator('[data-approved-pricing] [data-cta]')
+    .first()
     .evaluate((el) => el.addEventListener('click', (e) => e.preventDefault()));
-  await page.locator('[data-pricing] [data-cta]').click();
+  await page.locator('[data-approved-pricing] [data-cta]').first().click();
   await expect
     .poll(() =>
       page.evaluate(() => JSON.stringify((window as unknown as { __goals: unknown[] }).__goals)),
     )
     .toContain('cta_click');
+  expect(
+    await page.evaluate(
+      () => (window as any).__goals.filter((goal: unknown[]) => goal[2] === 'cta_click').length,
+    ),
+  ).toBe(1);
 });
 test('referral and first-touch attribution cookies survive navigation', async ({
   page,

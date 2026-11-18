@@ -57,13 +57,30 @@ test('sync uses API content and falls back for invalid content or HTTP errors', 
       res.end('{}');
     } else
       res.end(
-        JSON.stringify(mode === 'valid' ? { ...local, version: 'api-test' } : { invalid: true }),
+        JSON.stringify(
+          mode === 'valid'
+            ? { ...local, version: 'api-test' }
+            : mode === 'stale-whoop'
+              ? {
+                  ...local,
+                  services: local.services.map((s) =>
+                    s.id === 'whoop' ? { ...s, status: 'soon' } : s,
+                  ),
+                }
+              : mode === 'missing-whoop'
+                ? { ...local, services: local.services.filter((s) => s.id !== 'whoop') }
+                : { invalid: true },
+        ),
       );
   });
   await new Promise((res) => server.listen(0, '127.0.0.1', res));
   const app = `http://127.0.0.1:${server.address().port}`;
   try {
     assert.equal((await runSync(app)).version, 'api-test');
+    mode = 'stale-whoop';
+    assert.equal((await runSync(app)).services.find((s) => s.id === 'whoop').status, 'available');
+    mode = 'missing-whoop';
+    assert.equal((await runSync(app)).services.find((s) => s.id === 'whoop').status, 'available');
     mode = 'invalid';
     assert.deepEqual(await runSync(app), local);
     mode = 'fail';

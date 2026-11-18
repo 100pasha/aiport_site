@@ -24,4 +24,16 @@ if (app) {
     console.warn(`Catalog API unavailable (${error.message}); using local catalog.`);
   }
 } else console.log('Catalog: local preview data (platform not configured)');
+// Keep the confirmed WHOOP launch visible even if the API returns an older snapshot.
+const whoop = local.services.find((service) => service.id === 'whoop');
+if (whoop?.status === 'available' && selected !== local) {
+  selected = {
+    ...selected,
+    services: selected.services.some((service) => service.id === 'whoop')
+      ? selected.services.map((service) =>
+          service.id === 'whoop' ? { ...service, status: 'available' } : service,
+        )
+      : [...selected.services, whoop],
+  };
+}
 await writeFile('.astro/catalog.json', JSON.stringify(selected, null, 2));

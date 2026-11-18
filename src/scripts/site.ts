@@ -55,13 +55,17 @@ if (!hasCookie('utm')) {
   });
   if (Object.keys(utm).length) cookie('utm', JSON.stringify(utm), 30);
 }
-document
-  .querySelectorAll<HTMLElement>('[data-cta]')
-  .forEach((a) =>
-    a.addEventListener('click', () =>
-      track('cta_click', { block: a.dataset.cta, plan: a.dataset.plan || 'month' }),
-    ),
-  );
+// Delegation also covers CTAs added by a landing-page variant after initialization.
+document.addEventListener('click', (event) => {
+  const cta =
+    event.target instanceof Element ? event.target.closest<HTMLElement>('[data-cta]') : null;
+  if (!cta) return;
+  track('cta_click', {
+    block: cta.dataset.cta,
+    plan: cta.dataset.plan || 'month',
+    ...(cta.dataset.variant ? { variant: cta.dataset.variant } : {}),
+  });
+});
 const menu = document.querySelector<HTMLButtonElement>('.menu-toggle');
 const mobileMenu = document.querySelector<HTMLElement>('#mobile-menu');
 menu?.addEventListener('click', () => {

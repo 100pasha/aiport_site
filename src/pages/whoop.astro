@@ -1,14 +1,17 @@
 ---
 import { config, withBase, absoluteUrl, appLink } from '../lib/config';
 import { siteVersion } from '../lib/version';
-import '../styles/tokens.css';
+import content from '../components/whoop-letter.html?raw';
 import '../styles/whoop.css';
-const title = 'WHOOP + ChatGPT — поговорите со своими данными';
+const title = 'WHOOP в вашем ChatGPT — Ligos';
 const description =
-  'Сон, восстановление и тренировки WHOOP в ChatGPT. Подключите браслет через Ligos, задавайте вопросы и готовьте сводки для тренера. Один сервис бесплатно.';
+  'Подключите WHOOP к ChatGPT или Claude через Ligos. Сон, Recovery и тренировки — в вашем ИИ без скриншотов. Один сервис бесплатно.';
 const canonical = absoluteUrl('/whoop/');
-// Start in the guest chat; email is requested after the first additional answer.
-const connectUrl = appLink('/whoop');
+const image = absoluteUrl('/img/og.png?v=ligos-2');
+const html = content
+  .replace(/(href|src)="(\/[^"]*)"/g, (_, attr, path) => `${attr}="${withBase(path)}"`)
+  .replaceAll('https://app.ligos.io/whoop', appLink('/whoop'))
+  .replace('__SITE_VERSION__', siteVersion);
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
@@ -16,20 +19,19 @@ const schema = {
   description,
   url: canonical,
   inLanguage: 'ru',
-  isPartOf: { '@type': 'WebSite', name: config.brand, url: absoluteUrl('/') },
 };
 ---
 
 <!doctype html>
 <html lang="ru">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title} — {config.brand}</title>
+    <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#fafaf9" />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#fbfaf7" />
     <link
       rel="icon"
       type="image/svg+xml"
@@ -48,18 +50,12 @@ const schema = {
     />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ru_RU" />
-    <meta property="og:title" content={`${title} — ${config.brand}`} />
+    <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={absoluteUrl('/img/og.png?v=ligos-2')} />
+    <meta property="og:image" content={image} />
     <meta name="twitter:card" content="summary_large_image" />
     {config.verification && <meta name="yandex-verification" content={config.verification} />}
-    <link
-      rel="alternate"
-      type="application/rss+xml"
-      title={`Блог ${config.brand}`}
-      href={withBase('/rss.xml')}
-    />
     <link
       rel="preload"
       as="font"
@@ -74,389 +70,13 @@ const schema = {
       type="font/woff2"
       crossorigin
     />
-    {schema && (
-      <script
-        type="application/ld+json"
-        set:html={JSON.stringify(schema).replace(/</g, '\\u003c')}
-      />
-    )}
+    <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />
   </head>
-  <body
-    data-app={config.app}
-    data-site={config.site}
-    data-ym-id={config.ymId}
-    data-email={config.email}
-  >
-    <a class="skip-link" href="#main">
-      Перейти к содержимому
-    </a>
-
-    <header>
-      <a class="brand" href={withBase('/')}>
-        <img src={withBase('/logo-mark.svg')} width="38" height="38" alt="" /> Ligos
-      </a>
-      <nav class="nav" aria-label="Навигация WHOOP">
-        <a href="#examples">Примеры вопросов</a>
-        <a class="btn" href={connectUrl} data-cta="whoop_connect">
-          Подключить WHOOP ↗
-        </a>
-      </nav>
-    </header>
-    <main id="main">
-      <div class="hero">
-        <div>
-          <div class="eyebrow">Ligos × WHOOP</div>
-          <h1>
-            Ваш WHOOP.
-            <br />
-            Теперь с ним
-            <br />
-            <span>можно поговорить.</span>
-          </h1>
-          <p class="lead">
-            Сон, восстановление и тренировки — прямо в ChatGPT или другом вашем ИИ. Задавайте
-            вопросы своими словами и получайте ответы на основе ваших данных.
-          </p>
-          <div class="actions">
-            <a class="btn primary" href={connectUrl} data-cta="whoop_connect">
-              Подключить бесплатно ↗
-            </a>
-            <a class="btn" href="#examples">
-              Посмотреть примеры ↓
-            </a>
-          </div>
-          <p class="note">
-            Один сервис в Ligos — бесплатно. Начните с разбора в чате.
-            <br />
-            Подписки WHOOP и вашего ИИ оплачиваются отдельно.
-          </p>
-        </div>
-        <div class="stage">
-          <div class="phone">
-            <div class="island"></div>
-            <div class="chathead">
-              ChatGPT <span style="color:#2f5bea">+ Ligos</span>
-            </div>
-            <div class="bubble">Как я спал и восстановился? Сравни с моей обычной неделей.</div>
-            <div class="source">✓ Получены данные WHOOP · 7 дней</div>
-            <div class="metrics">
-              <div class="metric">
-                <strong>76%</strong>Recovery
-              </div>
-              <div class="metric">
-                <strong>7:24</strong>Сон
-              </div>
-              <div class="metric">
-                <strong>62</strong>HRV, мс
-              </div>
-            </div>
-            <div class="answer">
-              <b>Сегодня показатели выше среднего за неделю.</b>
-              <p>
-                Восстановление — <b>76% против 61%</b> в среднем. Спали на 38 минут дольше обычного.
-              </p>
-              <p>HRV — 62 мс, среднее за неделю — 55 мс. Пульс в покое — 54 против 57 уд/мин.</p>
-              <p>
-                Это совпало с более долгим сном. По этим данным нельзя утверждать, что именно он
-                стал причиной.
-              </p>
-              <b>Сравнить ещё и дни после тренировок?</b>
-            </div>
-            <div class="ask">
-              Спросите о своих данных… <span style="float:right">↑</span>
-            </div>
-          </div>
-          <div class="label">
-            Не нужно отправлять скриншоты<small>ИИ получает данные через Ligos</small>
-          </div>
-        </div>
-      </div>
-      <div class="divider">
-        <span>
-          <b>Сон</b> и его структура
-        </span>
-        <span>
-          <b>Recovery</b> и HRV
-        </span>
-        <span>
-          <b>Strain</b> и тренировки
-        </span>
-        <span>
-          <b>Динамика</b> за выбранный период
-        </span>
-      </div>
-      <p class="note">На экране — иллюстративный пример с вымышленными данными.</p>
-      <section id="examples">
-        <div class="eyebrow">Меньше графиков. Больше понимания.</div>
-        <h2 style="margin-top:16px">
-          Начните с того,
-          <br />
-          что вам действительно интересно.
-        </h2>
-        <p class="sectionintro">
-          Не ищите нужный экран. Спросите, сравните периоды и задайте уточняющий вопрос в том же
-          диалоге.
-        </p>
-        <div class="examples">
-          <article class="example">
-            <div class="tag">01 / УТРО</div>
-            <h3>«Что сегодня с моим восстановлением?»</h3>
-            <p>
-              Получите короткую сводку: Recovery, сон, HRV и пульс в покое — с отличиями от ваших
-              обычных показателей.
-            </p>
-            <button
-              type="button"
-              class="copy"
-              data-prompt="Через Ligos посмотри мой WHOOP. Дай сводку по сну и восстановлению за сегодня и сравни с моими средними показателями за последние 7 дней."
-            >
-              Скопировать вопрос ↗
-            </button>
-          </article>
-          <article class="example">
-            <div class="tag">02 / СОН</div>
-            <h3>«Я стал спать лучше за последний месяц?»</h3>
-            <p>
-              Сравните длительность и структуру сна по неделям. Попросите ИИ выделить изменения и
-              показать цифры.
-            </p>
-            <button
-              type="button"
-              class="copy"
-              data-prompt="Через Ligos сравни мой сон в WHOOP по неделям за последние 28 дней: длительность, эффективность и стадии сна. Покажи изменения и пропуски в данных."
-            >
-              Скопировать вопрос ↗
-            </button>
-          </article>
-          <article class="example">
-            <div class="tag">03 / ТРЕНИРОВКИ</div>
-            <h3>«Что было с Recovery после тяжёлых дней?»</h3>
-            <p>
-              Сопоставьте нагрузку и восстановление на следующий день. Найдите повторяющиеся
-              сочетания, а не догадки по одной тренировке.
-            </p>
-            <button
-              type="button"
-              class="copy"
-              data-prompt="Через Ligos сопоставь мою нагрузку WHOOP и Recovery на следующий день за 30 дней. Покажи повторяющиеся сочетания, не выдавая корреляцию за причинность."
-            >
-              Скопировать вопрос ↗
-            </button>
-          </article>
-        </div>
-        <article class="coach">
-          <div class="eyebrow">На связи с тренером</div>
-          <h3>Подготовьте сводку перед тренировкой</h3>
-          <p>
-            Попросите ChatGPT собрать сон, Recovery и нагрузку за неделю. Добавьте, как вы себя
-            чувствуете и что планируете, — получите сводку, которую можно обсудить с тренером в
-            привычном мессенджере.
-          </p>
-          <button
-            type="button"
-            class="copy"
-            data-prompt="Через Ligos подготовь сводку моих данных WHOOP для обсуждения с тренером: сон, Recovery, HRV, пульс в покое и нагрузка за последние 7 дней. Сравни с предыдущей неделей, укажи пропуски в данных и составь вопросы к тренеру. Не ставь диагнозов и не назначай лечение."
-          >
-            Скопировать вопрос для тренера ↗
-          </button>
-        </article>
-      </section>
-      <section>
-        <div class="dark">
-          <div>
-            <div class="eyebrow" style="color:#adc4ae">
-              Данные уже есть. Добавьте разговор.
-            </div>
-            <h2 style="margin-top:18px">
-              От показателя
-              <br />к понятной картине.
-            </h2>
-            <p>
-              Ligos связывает WHOOP с вашим ИИ. ИИ запрашивает нужные показатели, сравнивает их и
-              объясняет результат в диалоге.
-            </p>
-            <p>
-              А вы можете добавить контекст: «На этой неделе я был в перелёте» или «Я изменил
-              расписание тренировок».
-            </p>
-          </div>
-          <div class="data">
-            <div>
-              <b>Сон</b>
-              <small>Продолжительность, стадии, эффективность</small>
-            </div>
-            <div>
-              <b>Восстановление</b>
-              <small>Recovery, HRV, пульс в покое</small>
-            </div>
-            <div>
-              <b>Нагрузка</b>
-              <small>Дневной Strain и показатели тренировок</small>
-            </div>
-            <div>
-              <b>История</b>
-              <small>Сравнение дней, недель и выбранных периодов</small>
-            </div>
-          </div>
-        </div>
-        <p class="note">
-          Доступны показатели, которые WHOOP передаёт через API и на которые вы разрешили доступ. Не
-          все функции приложения WHOOP доступны через интеграцию.
-        </p>
-      </section>
-      <section id="connect" aria-labelledby="connect-title">
-        <div class="eyebrow">От WHOOP до первого ответа</div>
-        <h2 id="connect-title">
-          Подключите один раз.
-          <br />
-          Дальше — просто спрашивайте.
-        </h2>
-        <p class="sectionintro">
-          Начните с аккаунта WHOOP — без почты и регистрации в Ligos. Сразу получите разбор недели и
-          задайте первый вопрос. Выгружать файлы и создавать API-ключи не нужно.
-        </p>
-        <div class="steps">
-          <div class="step">
-            <span>1</span>
-            <h3>Откройте чат Ligos</h3>
-            <p>
-              Нажмите «Подключить WHOOP» — откроется чат. Он предложит войти в WHOOP и разрешить
-              чтение ваших показателей. Почта на этом шаге не нужна.
-            </p>
-            <a href={connectUrl} data-cta="whoop_step_1">
-              Подключить WHOOP ↗
-            </a>
-          </div>
-          <div class="step">
-            <span>2</span>
-            <h3>Подтвердите вход в WHOOP</h3>
-            <p>
-              Нажмите «Войти через WHOOP», войдите в аккаунт браслета и разрешите чтение
-              показателей. После возврата в тот же чат Ligos получит показатели и сравнит последнюю
-              неделю с предыдущей.
-            </p>
-          </div>
-          <div class="step">
-            <span>3</span>
-            <h3>Получите пользу сразу</h3>
-            <p>
-              Прочитайте сводку и задайте свой вопрос. Для продолжения подтвердите почту кодом из
-              письма: чат и WHOOP сохранятся в вашем кабинете. Можно общаться здесь дальше или
-              подключить ChatGPT и Claude.
-            </p>
-          </div>
-        </div>
-        <p class="setup-note">
-          <strong>Хотите продолжить в ChatGPT?</strong> После подтверждения почты выберите в чате
-          «Как подключить WHOOP к моему ИИ?» — получите свою ссылку и инструкцию. В ChatGPT откройте
-          настройки → приложения → создание приложения или пользовательского MCP-подключения. Если
-          такого пункта нет, проверьте доступность этой функции на вашем тарифе и разрешения
-          рабочего пространства. Ligos не включает подписку ChatGPT.
-        </p>
-        <div class="setup-links">
-          <a href={withBase('/podklyuchit/chatgpt/')}>Подробная инструкция для ChatGPT ↗</a>
-          <a href={withBase('/podklyuchit/')}>Подключить другой ИИ ↗</a>
-          <a href="https://t.me/pavel_stoyanov" target="_blank" rel="noopener noreferrer">
-            Помочь с настройкой ↗
-          </a>
-        </div>
-      </section>
-      <section class="privacy">
-        <div>
-          <div class="eyebrow">Ваши данные. Ваш выбор.</div>
-          <h2 style="margin-top:15px">
-            Вы решаете,
-            <br />
-            кому дать доступ.
-          </h2>
-          <p>
-            Ligos передаёт запрошенные данные вашему ИИ. Их обработка выбранным ИИ регулируется
-            условиями его провайдера. Вы можете отключить подключение в Ligos или отозвать доступ в
-            WHOOP.
-          </p>
-          <a style="font-size:13px;color:#2f5bea" href={withBase('/politika/')}>
-            Подробнее об обработке данных ↗
-          </a>
-        </div>
-        <div>
-          <details>
-            <summary>Это отдельный ИИ-тренер?</summary>
-            <p>
-              Нет, Ligos подключает данные WHOOP к вашему привычному ИИ. Вы продолжаете общение в
-              своём чате, а ИИ получает дополнительный контекст.
-            </p>
-          </details>
-          <details>
-            <summary>Нужно каждый раз загружать данные?</summary>
-            <p>
-              После подключения ИИ может запрашивать их через Ligos. Доступность свежих показателей
-              зависит от синхронизации и обработки данных в WHOOP.
-            </p>
-          </details>
-          <details>
-            <summary>Это бесплатно?</summary>
-            <p>
-              В Ligos можно бесплатно подключить один сервис — например, WHOOP. Условия и стоимость
-              подписок WHOOP и выбранного ИИ определяются отдельно.
-            </p>
-          </details>
-          <details>
-            <summary>Какие данные доступны и можно ли что-то изменить?</summary>
-            <p>
-              Интеграция читает профиль, параметры тела, сон, Recovery, циклы нагрузки и тренировки,
-              которые доступны через API WHOOP. Доступ к журналу привычек и другим экранам
-              приложения не обещается. Изменять данные в WHOOP через Ligos нельзя.
-            </p>
-          </details>
-          <details>
-            <summary>Подключение есть, а ChatGPT не видит показатели?</summary>
-            <p>
-              Включите Ligos в текущем чате и попросите «Через Ligos покажи мои подключения». Если
-              WHOOP просит повторный вход, переподключите его в Ligos. Для сегодняшних показателей
-              сначала синхронизируйте браслет с приложением WHOOP.
-            </p>
-          </details>
-          <details>
-            <summary>Можно использовать ответы для лечения?</summary>
-            <p>
-              Этот инструмент помогает разбираться в показателях и тенденциях. Он не ставит диагнозы
-              и не заменяет консультацию врача.
-            </p>
-          </details>
-        </div>
-      </section>
-      <div class="closing">
-        <div class="eyebrow">Первый вопрос уже есть</div>
-        <h2 style="margin-top:16px">«Как прошла моя неделя?»</h2>
-        <p>Подключите WHOOP — и получите ответ на своих данных.</p>
-        <a class="btn primary" href={connectUrl} data-cta="whoop_connect">
-          Попробовать бесплатно ↗
-        </a>
-      </div>
-    </main>
-    <footer>
-      <span>
-        Ligos · Ваши данные в одном разговоре.
-        <br />
-        Независимая интеграция. Не официальный продукт WHOOP.
-      </span>
-      <span>
-        ИП Стоянов Павел Георгиевич
-        <br />
-        ИНН 771888304488 · ОГРНИП 326774600164773
-        <br />
-        <span class="site-version">Версия сайта: {siteVersion}</span>
-      </span>
-      <span>
-        <a href={withBase('/politika/')}>Конфиденциальность</a>
-        <br />
-        <a href="https://t.me/pavel_stoyanov">Написать Павлу ↗</a>
-      </span>
-    </footer>
-    <div class="toast" role="status" aria-live="polite" hidden></div>
+  <body data-app={config.app} data-site={config.site} data-ym-id={config.ymId}>
+    <Fragment set:html={html} />
     <script>
+      import '../scripts/whoop.js';
       import '../scripts/site';
-      import '../scripts/whoop';
     </script>
   </body>
 </html>
